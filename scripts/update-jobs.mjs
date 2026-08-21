@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import { chromium } from "playwright";
-import { makeJob, normalizeText, stableId } from "./rules.mjs";
+import { cleanRoleTitle, isLikelyRoleTitle, makeJob, normalizeText, stableId } from "./rules.mjs";
 
 const root = new URL("../", import.meta.url);
 const readJson = async (path) => JSON.parse(await fs.readFile(new URL(path, root), "utf8"));
@@ -28,11 +28,13 @@ async function scanSource(source) {
     await page.evaluate(() => window.scrollTo(0, Math.min(document.body?.scrollHeight || 0, 5000))).catch(() => {});
     await page.waitForTimeout(800);
     const snapshot = await page.evaluate(() => {
-      const items = [...document.querySelectorAll("a[href]")].map((a) => ({
-        title: (a.textContent || a.getAttribute("aria-label") || a.getAttribute("title") || "").trim(),
+      const items = [...document.querySelectorAll("a[href]")].map((a) => {
+        const titleNode = a.querySelector('h1,h2,h3,h4,[class*="job-title"],[class*="position-name"],[class*="jobName"],[class*="positionName"]');
+        return {
+        title: (a.getAttribute("aria-label") || a.getAttribute("title") || titleNode?.textContent || a.textContent || "").trim(),
         context: (a.closest("li, article, section, tr, [class*=job], [class*=position], div")?.textContent || "").trim().slice(0, 1200),
         url: a.href
-      }));
+      }; });
       for (const script of document.querySelectorAll('script[type="application/ld+json"]')) {
         try {
           const values = [JSON.parse(script.textContent || "null")].flat().flatMap((value) => value?.["@graph"] || value || []);
@@ -45,8 +47,8 @@ async function scanSource(source) {
     const pageHas2027 = /2027\s*届|2027\s*(校园招聘|校招|应届)|2027 graduates/i.test(snapshot.pageText) || source.recruitYear === "2027";
     const unique = new Map();
     for (const item of snapshot.items) {
-      const title = normalizeText(item.title);
-      if (title.length < 2 || title.length > 140 || !/^https?:/.test(item.url)) continue;
+      const title = cleanRoleTitle(item.title);
+      if (!isLikelyRoleTitle(title) || !/^https?:/.test(item.url)) continue;
       const directLink = item.url.replace(/[#/?]+$/, "") !== source.url.replace(/[#/?]+$/, "") && !genericTitles.test(title);
       const candidate = { ...item, title, context: normalizeText(item.context), directLink };
       const job = makeJob(source, candidate, now, pageHas2027);
@@ -66,7 +68,14 @@ await browser.close();
 
 const deduped = new Map();
 for (const job of discovered) deduped.set(stableId(job.company, job.role, job.url), job);
-const existingById = new Map(jobs.map((job) => [job.id || stableId(job.company, job.role, job.url), job]));
+const rejectedExisting = [];
+const existingById = new Map();
+for (const job of jobs) {
+  const role = cleanRoleTitle(job.role);
+  if (!isLikelyRoleTitle(role)) { rejectedExisting.push(job); continue; }
+  const normalized = { ...job, role, id: stableId(job.company, role, job.url) };
+  existingById.set(normalized.id, normalized);
+}
 const added = [];
 for (const [id, job] of deduped) {
   const previous = existingById.get(id);
@@ -89,8 +98,8 @@ const nextJobs = [...existingById.values()].sort((a, b) => (b.confidenceRank || 
 history.archivedJobs = [...archived, ...history.archivedJobs];
 history.changeLog = [{
   date: day, type: archived.length ? "归档" : added.length ? "新增" : "更新",
-  title: added.length || archived.length ? `自动核查：新增${added.length}条，归档${archived.length}条` : "自动核查完成：暂无确定变更",
-  detail: `成功读取${successfulSources.size}/${sources.length}个可信公开来源；失败${failures.length}个。确定岗位和待官网核验线索分级展示。`
+  title: added.length || archived.length || rejectedExisting.length ? `自动核查：新增${added.length}条，归档${archived.length}条，清理误识别${rejectedExisting.length}条` : "自动核查完成：暂无确定变更",
+  detail: `成功读取${successfulSources.size}/${sources.length}个可信公开来源；失败${failures.length}个。企业介绍和非岗位长文本不会作为岗位名称入库。`
 }, ...history.changeLog].slice(0, 180);
 
 await writeJson("data/jobs.json", nextJobs);
@@ -100,7 +109,7 @@ await writeJson("data/meta.json", {
   sourceCount: sources.length, successfulSourceCount: successfulSources.size, failedSources: failures,
   verifiedCount: nextJobs.filter((job) => (job.confidenceRank || 2) === 2).length,
   leadCount: nextJobs.filter((job) => job.confidenceRank === 1).length,
-  activeCount: nextJobs.length, archivedCount: history.archivedJobs.length, addedCount: added.length, archivedThisRun: archived.length
+  activeCount: nextJobs.length, archivedCount: history.archivedJobs.length, addedCount: added.length, archivedThisRun: archived.length, rejectedTitleCount: rejectedExisting.length
 });
 if (failures.length === sources.length) throw new Error("所有来源均读取失败；已保留现有岗位数据，但本次运行不应部署");
 console.log(`完成：${successfulSources.size}/${sources.length}个来源，新增${added.length}，归档${archived.length}，当前${nextJobs.length}。`);
