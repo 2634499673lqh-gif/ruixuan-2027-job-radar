@@ -36,11 +36,9 @@ jobs:
         run: npm install --no-audit --no-fund
 
       - name: Install browser for scheduled scan
-        if: github.event_name != 'push'
         run: npx playwright install --with-deps chromium
 
       - name: Refresh public job sources
-        if: github.event_name != 'push'
         run: npm run update
 
       - name: Validate data
@@ -50,7 +48,6 @@ jobs:
         run: npm test
 
       - name: Save refreshed data
-        if: github.event_name != 'push'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
