@@ -1,8 +1,8 @@
 {
-  "lastSuccessfulCheck": "2026-08-21T08:45:44.534Z",
+  "lastSuccessfulCheck": "2026-08-21T09:05:48.082Z",
   "lastRunStatus": "partial",
   "sourceCount": 62,
-  "successfulSourceCount": 60,
+  "successfulSourceCount": 59,
   "failedSources": [
     {
       "company": "中国邮政储蓄银行",
@@ -13,12 +13,17 @@
       "company": "广东省国资委企业",
       "url": "https://gzw.gd.gov.cn/",
       "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://gzw.gd.gov.cn/\", waiting until \"domcontentloaded\"\n"
+    },
+    {
+      "company": "深圳市属国企",
+      "url": "http://gzw.sz.gov.cn/",
+      "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"http://gzw.sz.gov.cn/\", waiting until \"domcontentloaded\"\n"
     }
   ],
   "verifiedCount": 24,
   "leadCount": 16,
   "activeCount": 40,
   "archivedCount": 3,
-  "addedCount": 18,
+  "addedCount": 0,
   "archivedThisRun": 0
 }
