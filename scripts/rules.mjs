@@ -4,6 +4,9 @@ export const guangdongTerms = ["广东", "广州", "深圳", "珠海", "东莞",
 export const internshipTerms = ["实习", "intern", "暑期实习", "日常实习", "实习生", "byteintern"];
 export const graduateTerms = ["2027届", "2027 届", "2027校园招聘", "2027 校园招聘", "2027校招", "2027 校招", "2027应届", "2027 应届", "2027 graduates"];
 export const socialTerms = ["社会招聘", "社招", "有经验人士", "experienced hire"];
+export const nonGuangdongTerms = ["北京", "上海", "天津", "重庆", "浙江", "杭州", "宁波", "江苏", "南京", "苏州", "无锡", "福建", "厦门", "福州", "山东", "青岛", "济南", "四川", "成都", "湖北", "武汉", "湖南", "长沙", "安徽", "合肥", "陕西", "西安", "河南", "郑州", "河北", "石家庄", "辽宁", "沈阳", "大连", "吉林", "黑龙江", "江西", "南昌", "广西", "海南", "云南", "贵州", "甘肃", "新疆", "内蒙古"];
+const genericRoleTitles = /^(招聘岗位|岗位列表|职位列表|查看岗位|查看职位|热招职位|校园招聘|应届生|供应链族|职位详情|岗位详情)$/i;
+const introductionTerms = ["致力于", "企业使命", "经营理念", "战略的重要组成部分", "近年来持续", "核心职能", "大脑中枢", "旗下的", "成为顾客", "提供约", "查看详情"];
 
 const tracks = [
   { name: "产品运营", terms: ["产品运营", "用户运营", "互联网运营", "内容运营", "策略运营", "产品经理", "产品助理", "商业分析", "经营分析", "数据运营", "数据分析", "商品企划", "AI产品", "人工智能产品", "客户成功"], priority: "优先投递", score: 92 },
@@ -17,6 +20,19 @@ const tracks = [
 export function normalizeText(value = "") { return String(value).replace(/\s+/g, " ").trim(); }
 export function containsAny(text, terms) { const lower = text.toLowerCase(); return terms.some((term) => lower.includes(term.toLowerCase())); }
 export function classify(text) { return tracks.find((track) => containsAny(text, track.terms)) || null; }
+export function cleanRoleTitle(value = "") {
+  return normalizeText(value)
+    .replace(/发布于\s*20\d{2}[-/.]\d{1,2}[-/.]\d{1,2}.*$/i, "")
+    .replace(/(?:查看详情|立即投递)\s*$/i, "")
+    .trim();
+}
+export function isLikelyRoleTitle(value = "") {
+  const title = cleanRoleTitle(value);
+  if (title.length < 2 || title.length > 55 || genericRoleTitles.test(title)) return false;
+  if (/共\s*\d+\s*个职位/.test(title) || containsAny(title, introductionTerms)) return false;
+  if ((title.match(/[，。；！？]/g) || []).length >= 2) return false;
+  return true;
+}
 export function hasWrongGraduateYear(text) {
   return [...text.matchAll(/202[0-9]\s*届/g)].some((match) => !/2027\s*届/.test(match[0]));
 }
@@ -26,10 +42,11 @@ export function assessCandidate(text, source = {}, pageHas2027 = false) {
   const explicitYear = containsAny(normalized, graduateTerms);
   const yearConfirmed = explicitYear || (source.recruitYear === "2027" && pageHas2027);
   const explicitLocation = containsAny(normalized, guangdongTerms);
+  const explicitOutsideLocation = containsAny(normalized, nonGuangdongTerms);
   const sourceLocation = source.locationMode === "guangdongOnly";
   const locationConfirmed = explicitLocation || sourceLocation;
   const excluded = containsAny(normalized, internshipTerms) || containsAny(normalized, socialTerms) || (hasWrongGraduateYear(normalized) && !explicitYear);
-  const eligible = Boolean(track) && yearConfirmed && !excluded && (locationConfirmed || source.allowLocationLead === true);
+  const eligible = Boolean(track) && yearConfirmed && !excluded && (locationConfirmed || (source.allowLocationLead === true && !explicitOutsideLocation));
   return { eligible, track, explicitYear, locationConfirmed, confidence: yearConfirmed && locationConfirmed ? "已核验具体岗位" : "待官网核验", confidenceRank: yearConfirmed && locationConfirmed ? 2 : 1 };
 }
 export function isEligible(text, defaultCity = "") {
@@ -45,7 +62,8 @@ export function makeJob(source, candidate, now, pageHas2027 = false) {
   const text = normalizeText(`${candidate.title} ${candidate.context}`);
   const assessment = assessCandidate(text, source, pageHas2027);
   if (!assessment.eligible) return null;
-  const role = normalizeText(candidate.title).slice(0, 100);
+  const role = cleanRoleTitle(candidate.title);
+  if (!isLikelyRoleTitle(role)) return null;
   const directLink = candidate.directLink === true;
   const trustLabel = source.trustLevel === "government" ? "政府/国资公开来源" : source.trustLevel === "officialPartner" ? "企业授权招聘系统" : source.trustLevel === "notice" ? "公开招聘公告" : "企业官方招聘";
   return {

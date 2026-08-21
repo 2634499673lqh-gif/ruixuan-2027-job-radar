@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { assessCandidate, classify, isEligible, stableId } from "../scripts/rules.mjs";
+import { assessCandidate, cleanRoleTitle, classify, isEligible, isLikelyRoleTitle, stableId } from "../scripts/rules.mjs";
 
 test("只接受2027届广东正式校招", () => {
   assert.equal(isEligible("2027届校园招聘 深圳 海外业务专员", ""), true);
@@ -22,4 +22,16 @@ test("可能在广东的官方入口只能作为待核验线索", () => {
 test("明确2027届广东岗位为已核验具体岗位", () => {
   const result = assessCandidate("2027届 深圳 商务专员", {}, false);
   assert.equal(result.confidence, "已核验具体岗位");
+});
+test("企业介绍不能作为岗位名称", () => {
+  assert.equal(isLikelyRoleTitle("沃尔玛业态致力于通过打造差异化的商品、信任感以及全渠道便利，成为顾客最信任的购物首选地。"), false);
+  assert.equal(isLikelyRoleTitle("供应链族共16个职位"), false);
+  assert.equal(isLikelyRoleTitle("招聘岗位"), false);
+});
+test("动态招聘卡片只保留真实岗位名称", () => {
+  assert.equal(cleanRoleTitle("FILA商品运营岗-总部（2027届）发布于 2026-08-12斐乐品牌_20104001"), "FILA商品运营岗-总部（2027届）");
+  assert.equal(isLikelyRoleTitle("FILA商品运营岗-总部（2027届）"), true);
+});
+test("明确写明省外地点的岗位不能作为广东待核验线索", () => {
+  assert.equal(assessCandidate("2027届 订单管理岗 浙江衢州", { allowLocationLead: true }, true).eligible, false);
 });
