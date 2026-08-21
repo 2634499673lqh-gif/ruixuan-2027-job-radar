@@ -1,0 +1,15 @@
+{
+  "name": "ruixuan-2027-job-radar",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "update": "node scripts/update-jobs.mjs",
+    "validate": "node scripts/validate.mjs",
+    "build": "node scripts/build-site.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "dependencies": {
+    "playwright": "1.55.0"
+  }
+}

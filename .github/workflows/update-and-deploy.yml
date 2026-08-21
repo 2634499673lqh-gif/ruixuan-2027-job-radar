@@ -1,0 +1,74 @@
+name: Daily update and deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: "0 8 * * *"
+      timezone: "Asia/Shanghai"
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  update-build-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Install browser for scheduled scan
+        if: github.event_name != 'push'
+        run: npx playwright install --with-deps chromium
+
+      - name: Refresh public job sources
+        if: github.event_name != 'push'
+        run: npm run update
+
+      - name: Validate data
+        run: npm run validate
+
+      - name: Run tests
+        run: npm test
+
+      - name: Save refreshed data
+        if: github.event_name != 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- data/jobs.json data/history.json data/meta.json
+          git diff --cached --quiet || git commit -m "chore(data): daily job refresh [skip ci]"
+          git push
+
+      - name: Build static site
+        run: npm run build
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
