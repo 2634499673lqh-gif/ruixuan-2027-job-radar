@@ -1,10 +1,24 @@
 {
-  "lastSuccessfulCheck": "2026-08-20T22:44:00+08:00",
-  "lastRunStatus": "seed",
+  "lastSuccessfulCheck": "2026-08-21T08:45:44.534Z",
+  "lastRunStatus": "partial",
   "sourceCount": 62,
-  "successfulSourceCount": 62,
-  "verifiedCount": 22,
-  "leadCount": 0,
-  "activeCount": 22,
-  "archivedCount": 3
+  "successfulSourceCount": 60,
+  "failedSources": [
+    {
+      "company": "中国邮政储蓄银行",
+      "url": "https://psbc2026.zhaopin.com/",
+      "error": "HTTP 403"
+    },
+    {
+      "company": "广东省国资委企业",
+      "url": "https://gzw.gd.gov.cn/",
+      "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://gzw.gd.gov.cn/\", waiting until \"domcontentloaded\"\n"
+    }
+  ],
+  "verifiedCount": 24,
+  "leadCount": 16,
+  "activeCount": 40,
+  "archivedCount": 3,
+  "addedCount": 18,
+  "archivedThisRun": 0
 }
