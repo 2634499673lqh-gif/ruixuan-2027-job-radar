@@ -10,6 +10,7 @@ for (const [index, job] of jobs.entries()) {
   if (!guangdongTerms.some((term) => job.city.includes(term))) errors.push(`${job.company} 地点非广东：${job.city}`);
   if (internshipTerms.some((term) => `${job.role} ${job.type}`.toLowerCase().includes(term.toLowerCase()))) errors.push(`${job.company} 疑似实习：${job.role}`);
   if (!/^https?:\/\//.test(job.url)) errors.push(`${job.company} 链接无效：${job.url}`);
+  if (job.confidenceRank !== undefined && ![1, 2].includes(job.confidenceRank)) errors.push(`${job.company} 可信度等级无效`);
 }
 if (jobs.length < 10) errors.push(`活动岗位仅${jobs.length}条，触发防空保护`);
 if (errors.length) { console.error(errors.join("\n")); process.exit(1); }

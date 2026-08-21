@@ -1,7 +1,10 @@
 {
   "lastSuccessfulCheck": "2026-08-20T22:44:00+08:00",
   "lastRunStatus": "seed",
-  "sourceCount": 0,
+  "sourceCount": 62,
+  "successfulSourceCount": 62,
+  "verifiedCount": 22,
+  "leadCount": 0,
   "activeCount": 22,
   "archivedCount": 3
 }
