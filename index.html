@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="面向2027届毕业生的广东正式校招岗位雷达，每日自动核查公开招聘来源。">
+  <title>睿选机会｜2027届广东校招雷达</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <nav><a class="brand" href="#top"><span>睿</span>睿选机会</a><div><a href="#jobs">岗位</a><a href="#history">变更</a><a href="https://github.com/2634499673lqh-gif/ruixuan-2027-job-radar" target="_blank" rel="noreferrer">开源代码 ↗</a></div></nav>
+  <header id="top" class="hero">
+    <p class="eyebrow">OPEN-SOURCE · DAILY JOB RADAR</p>
+    <h1>每天醒来，<br><em>合适的机会已经排好。</em></h1>
+    <p class="intro">面向2027届毕业生，只看广东省内正式校招。公开来源自动核查，新增、变更和归档都有迹可循。</p>
+    <div class="stats"><div><strong id="activeCount">—</strong><span>当前岗位</span></div><div><strong id="priorityCount">—</strong><span>优先投递</span></div><div><strong id="sourceCount">—</strong><span>公开来源</span></div><div><strong id="appliedCount">0</strong><span>已进入流程</span></div></div>
+  </header>
+  <section class="freshness"><div><i id="healthDot"></i><span id="healthText">正在读取更新状态</span></div><strong id="updatedAt">最近更新：—</strong><small>每天 08:00（北京时间）自动核查；失败时保留上一版</small></section>
+  <main>
+    <section id="jobs" class="jobs-section">
+      <div class="section-head"><div><span>OPPORTUNITY BOARD</span><h2>广东省岗位池</h2></div><p>显示 <b id="visibleCount">0</b> 个岗位</p></div>
+      <div class="filters">
+        <label class="search"><span>⌕</span><input id="query" placeholder="搜索公司、岗位或方向"></label>
+        <select id="priority"><option>全部优先级</option><option>优先投递</option><option>相邻可投</option><option>补充选择</option></select>
+        <select id="track"><option>全部方向</option></select>
+        <select id="city"><option>全部城市</option><option>广州</option><option>深圳</option><option>珠海</option><option>东莞</option><option>佛山</option><option>惠州</option><option>广东省</option></select>
+        <select id="status"><option>全部状态</option><option>未投递</option><option>准备中</option><option>已投递</option><option>已笔试</option><option>已面试</option><option>已挂</option><option>暂不投递</option></select>
+      </div>
+      <div id="jobGrid" class="job-grid" aria-live="polite"></div>
+      <div id="empty" class="empty" hidden><b>没有符合当前条件的岗位</b><span>可以清空关键词或放宽一个筛选条件。</span></div>
+    </section>
+    <section id="history" class="history-section">
+      <div class="section-head"><div><span>CHANGELOG</span><h2>自动更新记录</h2></div><p>失效岗位进入归档，不会静默消失</p></div>
+      <div class="history-grid"><div><h3>最近变更</h3><ol id="changeLog"></ol></div><div><h3>已归档岗位</h3><div id="archiveList"></div></div></div>
+    </section>
+    <section class="method"><article><b>01</b><h3>只看2027届</h3><p>排除实习、社招以及其他毕业年份。</p></article><article><b>02</b><h3>限定广东</h3><p>广州、深圳、珠海及广东省内其他城市。</p></article><article><b>03</b><h3>方向语义筛选</h3><p>运营、出海、商务跟单、供应链、银行与管培。</p></article><article><b>04</b><h3>失败保护</h3><p>来源异常时保留旧数据，独立岗位连续三次缺失才归档。</p></article></section>
+  </main>
+  <footer><a class="brand" href="#top"><span>睿</span>睿选机会</a><p>信息来自公开招聘页面；投递前请以企业官方页面为准。</p><a href="https://github.com/2634499673lqh-gif/ruixuan-2027-job-radar" target="_blank" rel="noreferrer">GitHub</a></footer>
+  <script type="module" src="assets/app.js"></script>
+</body>
+</html>
