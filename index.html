@@ -6,7 +6,7 @@
   <meta name="description" content="面向2027届毕业生的广东正式校招岗位雷达，每日自动核查公开招聘来源。">
   <title>睿选机会｜2027届广东校招雷达</title>
   <link rel="stylesheet" href="assets/styles.css">
-  <style>.confidence{display:inline-flex!important;align-items:center;gap:4px;border-radius:99px!important;background:#e5f2eb!important;color:#246246}.confidence.lead{background:#fff0d8!important;color:#8a5a16}.filters{grid-template-columns:1.8fr repeat(5,1fr)}@media(max-width:950px){.filters{grid-template-columns:1fr 1fr}}@media(max-width:620px){.filters{grid-template-columns:1fr}}</style>
+  <style>.confidence{display:inline-flex!important;align-items:center;gap:4px;border-radius:99px!important;background:#e5f2eb!important;color:#246246}.confidence.lead{background:#fff0d8!important;color:#8a5a16}.view-tabs{display:flex;gap:8px;margin:0 0 18px;overflow:auto}.view-tabs button{border:1px solid #cbd4cd;background:#fff;color:#35554b;border-radius:99px;padding:10px 16px;font-weight:700;white-space:nowrap;cursor:pointer}.view-tabs button.active{background:var(--forest);border-color:var(--forest);color:#fff}.view-tabs b{display:inline-grid;place-items:center;min-width:22px;height:22px;margin-left:6px;padding:0 6px;border-radius:99px;background:#edf0ec;color:#35554b;font-size:11px}.view-tabs button.active b{background:var(--lime);color:var(--deep)}.filters{grid-template-columns:1.8fr repeat(5,1fr)}@media(max-width:950px){.filters{grid-template-columns:1fr 1fr}}@media(max-width:620px){.filters{grid-template-columns:1fr}}</style>
 </head>
 <body>
   <nav><a class="brand" href="#top"><span>睿</span>睿选机会</a><div><a href="#jobs">岗位</a><a href="#history">变更</a><a href="https://github.com/2634499673lqh-gif/ruixuan-2027-job-radar" target="_blank" rel="noreferrer">开源代码 ↗</a></div></nav>
@@ -20,13 +20,18 @@
   <main>
     <section id="jobs" class="jobs-section">
       <div class="section-head"><div><span>OPPORTUNITY BOARD</span><h2>广东省岗位池</h2></div><p>显示 <b id="visibleCount">0</b> 个岗位</p></div>
+      <div class="view-tabs" role="tablist" aria-label="岗位处理状态">
+        <button class="active" data-view="pending" role="tab">待处理 <b id="pendingViewCount">0</b></button>
+        <button data-view="applied" role="tab">已投递 <b id="appliedViewCount">0</b></button>
+        <button data-view="passed" role="tab">已 Pass <b id="passedViewCount">0</b></button>
+      </div>
       <div class="filters">
         <label class="search"><span>⌕</span><input id="query" placeholder="搜索公司、岗位或方向"></label>
         <select id="priority"><option>全部优先级</option><option>优先投递</option><option>相邻可投</option><option>补充选择</option></select>
         <select id="track"><option>全部方向</option></select>
         <select id="confidence"><option>全部可信度</option><option>已核验具体岗位</option><option>待官网核验</option></select>
         <select id="city"><option>全部城市</option><option>广州</option><option>深圳</option><option>珠海</option><option>东莞</option><option>佛山</option><option>惠州</option><option>广东省</option></select>
-        <select id="status"><option>全部状态</option><option>未投递</option><option>准备中</option><option>已投递</option><option>已笔试</option><option>已面试</option><option>已挂</option><option>暂不投递</option></select>
+        <select id="status"><option>全部状态</option><option>未投递</option><option>准备中</option><option>已投递</option><option>已笔试</option><option>已面试</option><option>已挂</option><option>暂不投递</option><option>Pass</option></select>
       </div>
       <div id="jobGrid" class="job-grid" aria-live="polite"></div>
       <div id="empty" class="empty" hidden><b>没有符合当前条件的岗位</b><span>可以清空关键词或放宽一个筛选条件。</span></div>
