@@ -1,8 +1,8 @@
 {
-  "lastSuccessfulCheck": "2026-08-21T09:22:36.125Z",
+  "lastSuccessfulCheck": "2026-08-22T03:09:56.297Z",
   "lastRunStatus": "partial",
   "sourceCount": 62,
-  "successfulSourceCount": 60,
+  "successfulSourceCount": 57,
   "failedSources": [
     {
       "company": "中国邮政储蓄银行",
@@ -10,16 +10,31 @@
       "error": "HTTP 403"
     },
     {
+      "company": "广发期货",
+      "url": "https://wecruit.hotjob.cn/SU6513bedd1eb8054296dc453c/pb/school.html",
+      "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://wecruit.hotjob.cn/SU6513bedd1eb8054296dc453c/pb/school.html\", waiting until \"domcontentloaded\"\n"
+    },
+    {
+      "company": "广州银行",
+      "url": "https://wecruit.hotjob.cn/SU6502ae701c240e3617e3c27d/mc/index",
+      "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://wecruit.hotjob.cn/SU6502ae701c240e3617e3c27d/mc/index\", waiting until \"domcontentloaded\"\n"
+    },
+    {
       "company": "广东省国资委企业",
       "url": "https://gzw.gd.gov.cn/",
       "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://gzw.gd.gov.cn/\", waiting until \"domcontentloaded\"\n"
+    },
+    {
+      "company": "深圳市属国企",
+      "url": "http://gzw.sz.gov.cn/",
+      "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"http://gzw.sz.gov.cn/\", waiting until \"domcontentloaded\"\n"
     }
   ],
   "verifiedCount": 33,
-  "leadCount": 12,
-  "activeCount": 45,
+  "leadCount": 13,
+  "activeCount": 46,
   "archivedCount": 3,
-  "addedCount": 11,
+  "addedCount": 1,
   "archivedThisRun": 0,
-  "rejectedTitleCount": 6
+  "rejectedTitleCount": 0
 }
