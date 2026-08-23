@@ -10,7 +10,7 @@
   <style>.confidence{display:inline-flex!important;align-items:center;gap:4px;border-radius:99px!important;background:#e5f2eb!important;color:#246246}.confidence.lead{background:#fff0d8!important;color:#8a5a16}.view-tabs{display:flex;gap:8px;margin:0 0 18px;overflow:auto}.view-tabs button{border:1px solid #cbd4cd;background:#fff;color:#35554b;border-radius:99px;padding:10px 16px;font-weight:700;white-space:nowrap;cursor:pointer}.view-tabs button.active{background:var(--forest);border-color:var(--forest);color:#fff}.view-tabs b{display:inline-grid;place-items:center;min-width:22px;height:22px;margin-left:6px;padding:0 6px;border-radius:99px;background:#edf0ec;color:#35554b;font-size:11px}.view-tabs button.active b{background:var(--lime);color:var(--deep)}.filters{grid-template-columns:1.8fr repeat(5,1fr)}@media(max-width:950px){.filters{grid-template-columns:1fr 1fr}}@media(max-width:620px){.filters{grid-template-columns:1fr}}</style>
 </head>
 <body>
-  <nav><a class="brand" href="#top"><span>睿</span>睿选机会</a><div><a href="#jobs">岗位</a><button id="openResumeLab" class="nav-button" type="button">简历定制</button><a href="#history">变更</a><a href="https://github.com/2634499673lqh-gif/ruixuan-2027-job-radar" target="_blank" rel="noreferrer">开源代码 ↗</a></div></nav>
+  <nav><a class="brand" href="#top"><span>睿</span>睿选机会</a><div><a href="#jobs">岗位</a><button id="openResumeLab" class="nav-button" type="button">简历编辑</button><a href="#history">变更</a><a href="https://github.com/2634499673lqh-gif/ruixuan-2027-job-radar" target="_blank" rel="noreferrer">开源代码 ↗</a></div></nav>
   <header id="top" class="hero">
     <p class="eyebrow">OPEN-SOURCE · DAILY JOB RADAR</p>
     <h1>每天醒来，<br><em>合适的机会已经排好。</em></h1>
@@ -45,28 +45,20 @@
   </main>
   <footer><a class="brand" href="#top"><span>睿</span>睿选机会</a><p>信息来自公开招聘页面；投递前请以企业官方页面为准。</p><a href="https://github.com/2634499673lqh-gif/ruixuan-2027-job-radar" target="_blank" rel="noreferrer">GitHub</a></footer>
   <dialog id="resumeLab" class="resume-lab">
-    <form method="dialog" class="resume-lab-head"><div><span>LOCAL AI · DESKTOP</span><h2>岗位定制简历</h2><p>简历与生成内容仅保存在这台电脑的浏览器中。</p></div><button value="cancel" aria-label="关闭">×</button></form>
-    <div class="resume-steps">
-      <section class="resume-panel">
-        <div class="resume-panel-title"><b>1</b><div><h3>基础简历</h3><p>可上传 PDF、DOCX、TXT 或直接粘贴；原文件不会被上传。</p></div></div>
-        <label class="file-drop">选择简历文件<input id="resumeFile" type="file" accept=".pdf,.docx,.txt,.md"></label>
-        <textarea id="resumeText" rows="13" placeholder="请粘贴简历正文，或选择文件自动读取……"></textarea>
-        <div class="inline-actions"><button id="saveResume" type="button" class="secondary">保存到本机</button><small id="resumeSavedHint"></small></div>
-      </section>
-      <section class="resume-panel">
-        <div class="resume-panel-title"><b>2</b><div><h3>目标岗位</h3><p>从岗位卡片进入时自动填充；职位详情不完整时可补充 JD。</p></div></div>
-        <div class="field-row"><label>企业<input id="targetCompany"></label><label>岗位<input id="targetRole"></label></div>
-        <textarea id="targetJd" rows="13" placeholder="岗位职责、任职要求、关键词……"></textarea>
+    <form method="dialog" class="resume-lab-head"><div><span>FAST RESUME EDITOR · LOCAL</span><h2>简历快速编辑</h2><p id="editorJobContext">选择岗位后，在右侧边看原稿边修改；文件不会上传。</p></div><button value="cancel" aria-label="关闭">×</button></form>
+    <div class="editor-toolbar-top">
+      <label class="file-drop">上传 PDF / DOCX<input id="resumeFile" type="file" accept=".pdf,.docx,.txt,.md"></label>
+      <span id="fileStatus">建议优先上传 DOCX，格式保留效果最好</span>
+      <button id="clearDocument" class="ghost-button" type="button">清空</button>
+    </div>
+    <div class="resume-workspace">
+      <section class="source-preview"><div class="pane-title"><b>原文件</b><span>只读对照</span></div><div id="sourceEmpty" class="source-empty">上传后在这里显示原 PDF；DOCX 将直接转换为编辑版。</div><iframe id="sourcePdf" title="原简历 PDF 预览" hidden></iframe></section>
+      <section class="editable-resume"><div class="pane-title"><b>可编辑版本</b><span id="fidelityHint">等待上传</span></div>
+        <div class="format-toolbar" aria-label="文字格式"><button type="button" data-command="undo">撤销</button><button type="button" data-command="redo">重做</button><button type="button" data-command="bold"><b>B</b></button><button type="button" data-command="insertUnorderedList">项目符号</button><select id="blockFormat"><option value="p">正文</option><option value="h2">一级标题</option><option value="h3">二级标题</option></select></div>
+        <div id="resumeEditor" class="resume-editor" contenteditable="true" spellcheck="false" data-placeholder="上传简历后即可直接修改……"></div>
       </section>
     </div>
-    <section class="ai-control">
-      <div><strong>免费本地 AI</strong><p id="aiStatus">尚未下载模型。只有点击生成并确认后，才会下载约 1–2GB 模型。</p><progress id="aiProgress" max="1" value="0" hidden></progress></div>
-      <button id="generateResume" type="button">AI 生成修改建议</button>
-    </section>
-    <section id="suggestionArea" class="suggestion-area" hidden>
-      <div class="suggestion-head"><div><span>REVIEW BEFORE USE</span><h3>逐条确认修改</h3></div><div><button id="acceptAll" class="secondary" type="button">全部采纳</button><button id="exportResume" type="button">打印 / 导出 PDF</button></div></div>
-      <div id="gapList" class="gap-list"></div><div id="suggestionList"></div>
-    </section>
+    <div class="export-bar"><div><strong>自动保存在当前浏览器</strong><p>PDF 转换可能无法完整还原复杂排版；想保持原样，请优先上传原始 DOCX。</p></div><div><button id="exportMarkdown" class="secondary" type="button">导出 Markdown</button><button id="exportWord" class="secondary" type="button">导出 Word</button><button id="exportPdf" type="button">打印 / 导出 PDF</button></div></div>
   </dialog>
   <script type="module" src="assets/app.js"></script>
   <script type="module" src="assets/resume.js"></script>

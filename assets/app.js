@@ -43,7 +43,7 @@ function render() {
       <h4>${escapeHtml(job.role)}</h4><p class="why">${escapeHtml(job.why)}</p>
       <div class="skills">${(job.skills || []).map((skill) => `<span>${escapeHtml(skill)}</span>`).join("")}</div>
       <div class="source"><span>● ${escapeHtml(job.source)}</span><small>${job.directLink ? "独立岗位页" : "招聘入口"}</small></div>
-      <div class="actions"><label>投递状态<select data-id="${job.id}">${statusOptions.map((item) => `<option ${item === (saved[job.id] || "未投递") ? "selected" : ""}>${item}</option>`).join("")}</select></label><div class="job-buttons"><button class="tailor-button" type="button" data-tailor="${escapeHtml(job.id)}">定制简历</button><a href="${escapeHtml(job.url)}" target="_blank" rel="noreferrer">${job.directLink ? "直达岗位" : "打开招聘入口"} ↗</a></div></div>
+      <div class="actions"><label>投递状态<select data-id="${job.id}">${statusOptions.map((item) => `<option ${item === (saved[job.id] || "未投递") ? "selected" : ""}>${item}</option>`).join("")}</select></label><div class="job-buttons"><button class="tailor-button" type="button" data-tailor="${escapeHtml(job.id)}">编辑简历</button><a href="${escapeHtml(job.url)}" target="_blank" rel="noreferrer">${job.directLink ? "直达岗位" : "打开招聘入口"} ↗</a></div></div>
     </article>`;
   }).join("");
   document.querySelectorAll("select[data-id]").forEach((select) => select.addEventListener("change", () => {
