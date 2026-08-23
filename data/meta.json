@@ -1,23 +1,13 @@
 {
-  "lastSuccessfulCheck": "2026-08-23T03:31:31.181Z",
+  "lastSuccessfulCheck": "2026-08-23T14:35:21.281Z",
   "lastRunStatus": "partial",
   "sourceCount": 62,
-  "successfulSourceCount": 57,
+  "successfulSourceCount": 59,
   "failedSources": [
-    {
-      "company": "图为电气",
-      "url": "https://xym.51job.com/wechat/vuectmjobs/#/index?id=AC3DF781-C7A1-4360-A098-74A6DA678875",
-      "error": "page.goto: net::ERR_TIMED_OUT at https://xym.51job.com/wechat/vuectmjobs/#/index?id=AC3DF781-C7A1-4360-A098-74A6DA678875\nCall log:\n  - navigating to \"https://xym.51job.com/wechat/v"
-    },
     {
       "company": "中国邮政储蓄银行",
       "url": "https://psbc2026.zhaopin.com/",
       "error": "HTTP 403"
-    },
-    {
-      "company": "中国工商银行",
-      "url": "https://job.icbc.com.cn/",
-      "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://job.icbc.com.cn/\", waiting until \"domcontentloaded\"\n"
     },
     {
       "company": "广东省国资委企业",
@@ -35,6 +25,6 @@
   "activeCount": 44,
   "archivedCount": 5,
   "addedCount": 0,
-  "archivedThisRun": 2,
+  "archivedThisRun": 0,
   "rejectedTitleCount": 0
 }
