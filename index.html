@@ -6,10 +6,11 @@
   <meta name="description" content="面向2027届毕业生的广东正式校招岗位雷达，每日自动核查公开招聘来源。">
   <title>睿选机会｜2027届广东校招雷达</title>
   <link rel="stylesheet" href="assets/styles.css">
+  <link rel="stylesheet" href="assets/resume.css">
   <style>.confidence{display:inline-flex!important;align-items:center;gap:4px;border-radius:99px!important;background:#e5f2eb!important;color:#246246}.confidence.lead{background:#fff0d8!important;color:#8a5a16}.view-tabs{display:flex;gap:8px;margin:0 0 18px;overflow:auto}.view-tabs button{border:1px solid #cbd4cd;background:#fff;color:#35554b;border-radius:99px;padding:10px 16px;font-weight:700;white-space:nowrap;cursor:pointer}.view-tabs button.active{background:var(--forest);border-color:var(--forest);color:#fff}.view-tabs b{display:inline-grid;place-items:center;min-width:22px;height:22px;margin-left:6px;padding:0 6px;border-radius:99px;background:#edf0ec;color:#35554b;font-size:11px}.view-tabs button.active b{background:var(--lime);color:var(--deep)}.filters{grid-template-columns:1.8fr repeat(5,1fr)}@media(max-width:950px){.filters{grid-template-columns:1fr 1fr}}@media(max-width:620px){.filters{grid-template-columns:1fr}}</style>
 </head>
 <body>
-  <nav><a class="brand" href="#top"><span>睿</span>睿选机会</a><div><a href="#jobs">岗位</a><a href="#history">变更</a><a href="https://github.com/2634499673lqh-gif/ruixuan-2027-job-radar" target="_blank" rel="noreferrer">开源代码 ↗</a></div></nav>
+  <nav><a class="brand" href="#top"><span>睿</span>睿选机会</a><div><a href="#jobs">岗位</a><button id="openResumeLab" class="nav-button" type="button">简历定制</button><a href="#history">变更</a><a href="https://github.com/2634499673lqh-gif/ruixuan-2027-job-radar" target="_blank" rel="noreferrer">开源代码 ↗</a></div></nav>
   <header id="top" class="hero">
     <p class="eyebrow">OPEN-SOURCE · DAILY JOB RADAR</p>
     <h1>每天醒来，<br><em>合适的机会已经排好。</em></h1>
@@ -43,6 +44,31 @@
     <section class="method"><article><b>01</b><h3>只看2027届</h3><p>排除实习、社招以及其他毕业年份。</p></article><article><b>02</b><h3>广东证据分级</h3><p>明确地点为确定岗位；入口有可能但地点未展开时标为待核验。</p></article><article><b>03</b><h3>可信来源优先</h3><p>企业官网、授权招聘系统、政府与国资公开公告。</p></article><article><b>04</b><h3>失败保护</h3><p>来源异常时保留旧数据，独立岗位连续三次缺失才归档。</p></article></section>
   </main>
   <footer><a class="brand" href="#top"><span>睿</span>睿选机会</a><p>信息来自公开招聘页面；投递前请以企业官方页面为准。</p><a href="https://github.com/2634499673lqh-gif/ruixuan-2027-job-radar" target="_blank" rel="noreferrer">GitHub</a></footer>
+  <dialog id="resumeLab" class="resume-lab">
+    <form method="dialog" class="resume-lab-head"><div><span>LOCAL AI · DESKTOP</span><h2>岗位定制简历</h2><p>简历与生成内容仅保存在这台电脑的浏览器中。</p></div><button value="cancel" aria-label="关闭">×</button></form>
+    <div class="resume-steps">
+      <section class="resume-panel">
+        <div class="resume-panel-title"><b>1</b><div><h3>基础简历</h3><p>可上传 PDF、DOCX、TXT 或直接粘贴；原文件不会被上传。</p></div></div>
+        <label class="file-drop">选择简历文件<input id="resumeFile" type="file" accept=".pdf,.docx,.txt,.md"></label>
+        <textarea id="resumeText" rows="13" placeholder="请粘贴简历正文，或选择文件自动读取……"></textarea>
+        <div class="inline-actions"><button id="saveResume" type="button" class="secondary">保存到本机</button><small id="resumeSavedHint"></small></div>
+      </section>
+      <section class="resume-panel">
+        <div class="resume-panel-title"><b>2</b><div><h3>目标岗位</h3><p>从岗位卡片进入时自动填充；职位详情不完整时可补充 JD。</p></div></div>
+        <div class="field-row"><label>企业<input id="targetCompany"></label><label>岗位<input id="targetRole"></label></div>
+        <textarea id="targetJd" rows="13" placeholder="岗位职责、任职要求、关键词……"></textarea>
+      </section>
+    </div>
+    <section class="ai-control">
+      <div><strong>免费本地 AI</strong><p id="aiStatus">尚未下载模型。只有点击生成并确认后，才会下载约 1–2GB 模型。</p><progress id="aiProgress" max="1" value="0" hidden></progress></div>
+      <button id="generateResume" type="button">AI 生成修改建议</button>
+    </section>
+    <section id="suggestionArea" class="suggestion-area" hidden>
+      <div class="suggestion-head"><div><span>REVIEW BEFORE USE</span><h3>逐条确认修改</h3></div><div><button id="acceptAll" class="secondary" type="button">全部采纳</button><button id="exportResume" type="button">打印 / 导出 PDF</button></div></div>
+      <div id="gapList" class="gap-list"></div><div id="suggestionList"></div>
+    </section>
+  </dialog>
   <script type="module" src="assets/app.js"></script>
+  <script type="module" src="assets/resume.js"></script>
 </body>
 </html>

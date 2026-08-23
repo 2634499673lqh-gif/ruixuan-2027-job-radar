@@ -43,7 +43,7 @@ function render() {
       <h4>${escapeHtml(job.role)}</h4><p class="why">${escapeHtml(job.why)}</p>
       <div class="skills">${(job.skills || []).map((skill) => `<span>${escapeHtml(skill)}</span>`).join("")}</div>
       <div class="source"><span>● ${escapeHtml(job.source)}</span><small>${job.directLink ? "独立岗位页" : "招聘入口"}</small></div>
-      <div class="actions"><label>投递状态<select data-id="${job.id}">${statusOptions.map((item) => `<option ${item === (saved[job.id] || "未投递") ? "selected" : ""}>${item}</option>`).join("")}</select></label><a href="${escapeHtml(job.url)}" target="_blank" rel="noreferrer">${job.directLink ? "直达岗位" : "打开招聘入口"} ↗</a></div>
+      <div class="actions"><label>投递状态<select data-id="${job.id}">${statusOptions.map((item) => `<option ${item === (saved[job.id] || "未投递") ? "selected" : ""}>${item}</option>`).join("")}</select></label><div class="job-buttons"><button class="tailor-button" type="button" data-tailor="${escapeHtml(job.id)}">定制简历</button><a href="${escapeHtml(job.url)}" target="_blank" rel="noreferrer">${job.directLink ? "直达岗位" : "打开招聘入口"} ↗</a></div></div>
     </article>`;
   }).join("");
   document.querySelectorAll("select[data-id]").forEach((select) => select.addEventListener("change", () => {
@@ -51,6 +51,10 @@ function render() {
     localStorage.setItem("ruixuan-status-v3", JSON.stringify(saved));
     updateViewCounts();
     render();
+  }));
+  document.querySelectorAll("[data-tailor]").forEach((button) => button.addEventListener("click", () => {
+    const job = jobs.find((item) => item.id === button.dataset.tailor);
+    window.dispatchEvent(new CustomEvent("open-resume-lab", { detail: job }));
   }));
 }
 for (const selector of ["#query", "#priority", "#track", "#confidence", "#city", "#status"]) $(selector).addEventListener(selector === "#query" ? "input" : "change", render);
