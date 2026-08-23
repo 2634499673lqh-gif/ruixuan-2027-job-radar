@@ -1,23 +1,23 @@
 {
-  "lastSuccessfulCheck": "2026-08-22T03:09:56.297Z",
+  "lastSuccessfulCheck": "2026-08-23T03:31:31.181Z",
   "lastRunStatus": "partial",
   "sourceCount": 62,
   "successfulSourceCount": 57,
   "failedSources": [
+    {
+      "company": "图为电气",
+      "url": "https://xym.51job.com/wechat/vuectmjobs/#/index?id=AC3DF781-C7A1-4360-A098-74A6DA678875",
+      "error": "page.goto: net::ERR_TIMED_OUT at https://xym.51job.com/wechat/vuectmjobs/#/index?id=AC3DF781-C7A1-4360-A098-74A6DA678875\nCall log:\n  - navigating to \"https://xym.51job.com/wechat/v"
+    },
     {
       "company": "中国邮政储蓄银行",
       "url": "https://psbc2026.zhaopin.com/",
       "error": "HTTP 403"
     },
     {
-      "company": "广发期货",
-      "url": "https://wecruit.hotjob.cn/SU6513bedd1eb8054296dc453c/pb/school.html",
-      "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://wecruit.hotjob.cn/SU6513bedd1eb8054296dc453c/pb/school.html\", waiting until \"domcontentloaded\"\n"
-    },
-    {
-      "company": "广州银行",
-      "url": "https://wecruit.hotjob.cn/SU6502ae701c240e3617e3c27d/mc/index",
-      "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://wecruit.hotjob.cn/SU6502ae701c240e3617e3c27d/mc/index\", waiting until \"domcontentloaded\"\n"
+      "company": "中国工商银行",
+      "url": "https://job.icbc.com.cn/",
+      "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://job.icbc.com.cn/\", waiting until \"domcontentloaded\"\n"
     },
     {
       "company": "广东省国资委企业",
@@ -31,10 +31,10 @@
     }
   ],
   "verifiedCount": 33,
-  "leadCount": 13,
-  "activeCount": 46,
-  "archivedCount": 3,
-  "addedCount": 1,
-  "archivedThisRun": 0,
+  "leadCount": 11,
+  "activeCount": 44,
+  "archivedCount": 5,
+  "addedCount": 0,
+  "archivedThisRun": 2,
   "rejectedTitleCount": 0
 }
