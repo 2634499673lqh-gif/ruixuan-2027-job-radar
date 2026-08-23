@@ -1,132 +1,108 @@
 const lab = document.querySelector("#resumeLab");
 const $ = (selector) => lab.querySelector(selector);
 const storageKey = "ruixuan-resume-editor-v2";
-let sourceUrl = "";
-let currentFileName = "定制简历";
+let sourceUrl = "", currentFileName = "定制简历", pdfjs, pdfDocument, selectedBlock;
+let pageRecords = [], activeMode = "layout";
 
 $("#resumeEditor").innerHTML = localStorage.getItem(storageKey) || "";
 document.querySelector("#openResumeLab").addEventListener("click", () => openLab());
 window.addEventListener("open-resume-lab", ({ detail: job }) => openLab(job));
-
 function openLab(job) {
-  if (job) {
-    $("#editorJobContext").textContent = `正在为「${job.company} — ${job.role}」修改简历`;
-    currentFileName = safeName(`${job.company}-${job.role}-定制简历`);
-  } else {
-    $("#editorJobContext").textContent = "上传简历后，在右侧边看原稿边修改；文件不会上传。";
-    currentFileName = "定制简历";
-  }
+  $("#editorJobContext").textContent = job ? `正在为「${job.company} — ${job.role}」修改简历` : "上传 PDF 后，点击页面中的文字即可局部修改；照片和图形保持不变。";
+  currentFileName = job ? safeName(`${job.company}-${job.role}-定制简历`) : "定制简历";
   lab.showModal();
 }
 
+lab.querySelectorAll("[data-editor-mode]").forEach((button) => button.addEventListener("click", () => switchMode(button.dataset.editorMode)));
+function switchMode(mode) {
+  activeMode = mode;
+  lab.querySelectorAll("[data-editor-mode]").forEach((button) => button.classList.toggle("active", button.dataset.editorMode === mode));
+  $("#layoutWorkspace").hidden = mode !== "layout"; $("#reflowWorkspace").hidden = mode !== "reflow";
+  lab.querySelectorAll(".reflow-export").forEach((button) => button.hidden = mode !== "reflow");
+  $("#exportPdf").textContent = mode === "layout" ? "导出原版式 PDF" : "打印 / 导出 PDF";
+  $("#saveModeText").textContent = mode === "layout" ? "原版式模式：照片和图形不变，只覆盖修改文字" : "内容重排模式：适合大幅增删内容";
+  $("#exportHint").textContent = mode === "layout" ? "导出的 PDF 会高清扁平化，避免中文乱码。" : "复杂 PDF 样式可能无法完整保留，建议对照左侧原稿。";
+}
+switchMode("layout");
+
 $("#resumeFile").addEventListener("change", async ({ target }) => {
-  const file = target.files[0];
-  if (!file) return;
+  const file = target.files[0]; if (!file) return;
   currentFileName = currentFileName === "定制简历" ? safeName(file.name.replace(/\.[^.]+$/, "") + "-编辑版") : currentFileName;
   setStatus(`正在本地读取 ${file.name}…`);
   try {
-    const suffix = file.name.split(".").pop().toLowerCase();
-    revokeSource();
+    const suffix = file.name.split(".").pop().toLowerCase(); revokeSource();
     if (suffix === "pdf") await importPdf(file);
-    else if (suffix === "docx") await importDocx(file);
-    else if (["txt", "md"].includes(suffix)) importPlain(await file.text(), suffix);
+    else if (suffix === "docx") { await importDocx(file); switchMode("reflow"); }
+    else if (["txt", "md"].includes(suffix)) { importPlain(await file.text(), suffix); switchMode("reflow"); }
     else throw new Error("暂不支持这个文件格式");
     persist();
   } catch (error) { setStatus(`读取失败：${error.message}`, true); }
 });
 
 async function importPdf(file) {
-  sourceUrl = URL.createObjectURL(file);
-  $("#sourcePdf").src = sourceUrl;
-  $("#sourcePdf").hidden = false;
-  $("#sourceEmpty").hidden = true;
-  const pdfjs = await import("https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.mjs");
+  sourceUrl = URL.createObjectURL(file); $("#sourcePdf").src = sourceUrl; $("#sourcePdf").hidden = false; $("#sourceEmpty").hidden = true;
+  pdfjs = await import("https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.mjs");
   pdfjs.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs";
-  const pdf = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
-  const pageHtml = [];
-  for (let pageNo = 1; pageNo <= pdf.numPages; pageNo++) {
-    const page = await pdf.getPage(pageNo);
-    const content = await page.getTextContent();
-    const lines = groupPdfLines(content.items);
-    pageHtml.push(`<section class="imported-page">${lines.map(lineToHtml).join("")}</section>`);
-  }
-  $("#resumeEditor").innerHTML = pageHtml.join("");
-  $("#fidelityHint").textContent = "PDF 已重建 · 左侧对照原稿";
-  setStatus("PDF 已在本地转换。复杂分栏和图形可能需要少量调整。", false);
+  pdfDocument = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
+  pageRecords = []; selectedBlock = null; $("#pdfPages").innerHTML = "";
+  for (let pageNo = 1; pageNo <= pdfDocument.numPages; pageNo++) await renderLayoutPage(await pdfDocument.getPage(pageNo), pageNo);
+  const reflowPages = pageRecords.map((record) => `<section class="imported-page">${record.blocks.map(lineToHtml).join("")}</section>`);
+  $("#resumeEditor").innerHTML = reflowPages.join(""); $("#fidelityHint").textContent = "PDF 重排版 · 左侧对照原稿";
+  switchMode("layout"); setStatus(`PDF 已载入，共 ${pdfDocument.numPages} 页。点击页面文字即可修改。`);
 }
 
-function groupPdfLines(items) {
-  const rows = [];
-  for (const item of items.filter((entry) => entry.str?.trim())) {
-    const y = Math.round(item.transform?.[5] || 0);
-    let row = rows.find((entry) => Math.abs(entry.y - y) <= 2);
-    if (!row) { row = { y, items: [] }; rows.push(row); }
-    row.items.push(item);
+async function renderLayoutPage(page, pageNo) {
+  const scale = 2, viewport = page.getViewport({ scale });
+  const shell = document.createElement("article"); shell.className = "pdf-edit-page"; shell.style.width = `${viewport.width}px`; shell.style.height = `${viewport.height}px`;
+  const canvas = document.createElement("canvas"); canvas.width = Math.ceil(viewport.width); canvas.height = Math.ceil(viewport.height);
+  const overlay = document.createElement("div"); overlay.className = "pdf-text-overlay";
+  shell.append(canvas, overlay); $("#pdfPages").append(shell);
+  await page.render({ canvasContext: canvas.getContext("2d"), viewport }).promise;
+  const content = await page.getTextContent();
+  const blocks = groupPdfLines(content.items, viewport, canvas, pageNo);
+  const record = { pageNo, canvas, viewport, blocks, pdfWidth: page.view[2], pdfHeight: page.view[3] }; pageRecords.push(record);
+  for (const block of blocks) {
+    const button = document.createElement("button"); button.type = "button"; button.className = "pdf-text-block"; button.title = block.original;
+    Object.assign(button.style, { left:`${block.x}px`, top:`${block.y}px`, width:`${block.width}px`, height:`${block.height}px`, fontSize:`${block.fontSize}px` });
+    button.addEventListener("click", () => selectBlock(block, button)); block.element = button; overlay.append(button);
   }
-  return rows.sort((a, b) => b.y - a.y).map((row) => {
-    row.items.sort((a, b) => (a.transform?.[4] || 0) - (b.transform?.[4] || 0));
-    return { text: row.items.map((item) => item.str).join(" ").replace(/\s+/g, " ").trim(), size: Math.max(...row.items.map((item) => Math.abs(item.transform?.[0] || item.height || 11))) };
+}
+
+function groupPdfLines(items, viewport, canvas, pageNo) {
+  const fragments = items.filter((item) => item.str?.trim()).map((item) => {
+    const tx = pdfjs.Util.transform(viewport.transform, item.transform); const fontSize = Math.max(8, Math.hypot(tx[2], tx[3]));
+    return { text:item.str, x:tx[4], y:tx[5]-fontSize, width:Math.max(item.width*viewport.scale, 5), height:fontSize*1.25, fontSize };
   });
+  const rows=[];
+  for(const fragment of fragments.sort((a,b)=>a.y-b.y||a.x-b.x)){let row=rows.find((entry)=>Math.abs(entry.y-fragment.y)<Math.max(3,fragment.fontSize*.3));if(!row){row={y:fragment.y,items:[]};rows.push(row)}row.items.push(fragment)}
+  return rows.map((row,index)=>{row.items.sort((a,b)=>a.x-b.x);const x=Math.min(...row.items.map(i=>i.x)),end=Math.max(...row.items.map(i=>i.x+i.width)),fontSize=Math.max(...row.items.map(i=>i.fontSize)),height=Math.max(...row.items.map(i=>i.height));const text=row.items.map(i=>i.text).join(" ").replace(/\s+/g," ").trim();return {id:`${pageNo}-${index}`,pageNo,original:text,text,x,y:Math.min(...row.items.map(i=>i.y)),width:Math.max(end-x,60),height:Math.max(height,16),fontSize,color:"#172f29",background:sampleBackground(canvas,x,row.y,end-x,height),modified:false}});
 }
+function sampleBackground(canvas,x,y,w,h){const ctx=canvas.getContext("2d"),points=[[x-2,y+h/2],[x+w+2,y+h/2],[x+w/2,y-2],[x+w/2,y+h+2]];let r=0,g=0,b=0,n=0;for(const [px,py] of points){if(px<0||py<0||px>=canvas.width||py>=canvas.height)continue;const d=ctx.getImageData(Math.floor(px),Math.floor(py),1,1).data;r+=d[0];g+=d[1];b+=d[2];n++}return n?`rgb(${Math.round(r/n)},${Math.round(g/n)},${Math.round(b/n)})`:"white"}
+function lineToHtml(block){const tag=block.fontSize>=30?"h2":block.fontSize>=23?"h3":"p";return `<${tag}>${escapeHtml(block.original)}</${tag}>`}
 
-function lineToHtml(line) {
-  const tag = line.size >= 17 ? "h2" : line.size >= 13.5 ? "h3" : "p";
-  return `<${tag}>${escapeHtml(line.text)}</${tag}>`;
+function selectBlock(block, element) {
+  lab.querySelectorAll(".pdf-text-block.selected").forEach((item)=>item.classList.remove("selected")); element.classList.add("selected"); selectedBlock=block;
+  $("#blockEmpty").hidden=true; $("#blockForm").hidden=false; $("#blockPosition").textContent=`第 ${block.pageNo} 页`;
+  $("#originalBlockText").value=block.original; $("#editedBlockText").value=block.text; $("#blockFontSize").value=(block.fontSize/2).toFixed(1); $("#blockColor").value=block.color;
+  $("#blockWidth").max=Math.max(80,Math.floor(pageRecords[block.pageNo-1].canvas.width-block.x-8)); $("#blockWidth").value=block.width; updateOverflowHint();
 }
+$("#editedBlockText").addEventListener("input",updateOverflowHint); $("#blockFontSize").addEventListener("input",updateOverflowHint); $("#blockWidth").addEventListener("input",updateOverflowHint);
+function textWidth(block,text,size){const ctx=pageRecords[block.pageNo-1].canvas.getContext("2d");ctx.font=`${size}px Microsoft YaHei, sans-serif`;return ctx.measureText(text).width}function updateOverflowHint(){if(!selectedBlock)return;const size=Number($("#blockFontSize").value)*2,width=Number($("#blockWidth").value),required=textWidth(selectedBlock,$("#editedBlockText").value,size);const overflow=required>width;$("#overflowHint").textContent=overflow?`当前文字需要约 ${Math.ceil(required)}px；请扩大文本框、减小字号或缩短内容。`:"长度正常，可在页面中预览。";$("#overflowHint").classList.toggle("warning",overflow)}
+$("#applyBlock").addEventListener("click",()=>{if(!selectedBlock)return;const text=$("#editedBlockText").value.trim(),record=pageRecords[selectedBlock.pageNo-1],maxWidth=record.canvas.width-selectedBlock.x-8;let fontSize=Number($("#blockFontSize").value)*2,width=Number($("#blockWidth").value),required=textWidth(selectedBlock,text,fontSize);if(required>width)width=Math.min(maxWidth,Math.ceil(required+6));if(required>maxWidth){const fitted=fontSize*maxWidth/required;if(fitted<selectedBlock.fontSize*.75){$("#overflowHint").textContent="文字过长，自动缩小后仍会影响阅读。请缩短内容后再应用。";$("#overflowHint").classList.add("warning");return}fontSize=fitted;width=maxWidth}selectedBlock.text=text;selectedBlock.fontSize=fontSize;selectedBlock.width=width;selectedBlock.color=$("#blockColor").value;selectedBlock.modified=text!==selectedBlock.original;$("#blockFontSize").value=(fontSize/2).toFixed(1);$("#blockWidth").value=width;renderBlock(selectedBlock);updateOverflowHint();setStatus(`已应用第 ${selectedBlock.pageNo} 页的文字修改`)});
+$("#resetBlock").addEventListener("click",()=>{if(!selectedBlock)return;selectedBlock.text=selectedBlock.original;selectedBlock.modified=false;selectedBlock.element.removeAttribute("style");Object.assign(selectedBlock.element.style,{left:`${selectedBlock.x}px`,top:`${selectedBlock.y}px`,width:`${selectedBlock.width}px`,height:`${selectedBlock.height}px`,fontSize:`${selectedBlock.fontSize}px`});$("#editedBlockText").value=selectedBlock.original;setStatus("已恢复原文字")});
+function renderBlock(block){const el=block.element;el.style.width=`${block.width}px`;el.style.fontSize=`${block.fontSize}px`;el.classList.toggle("modified",block.modified);el.textContent=block.modified?block.text:"";el.style.background=block.modified?block.background:"transparent";el.style.color=block.color;el.style.height=block.modified?"auto":`${block.height}px`;}
 
-async function importDocx(file) {
-  const mammothModule = await import("https://esm.sh/mammoth@1.9.0/mammoth.browser.min.js");
-  const mammoth = mammothModule.default || mammothModule;
-  const result = await mammoth.convertToHtml({ arrayBuffer: await file.arrayBuffer() });
-  $("#resumeEditor").innerHTML = `<section class="imported-page">${result.value}</section>`;
-  $("#sourcePdf").hidden = true;
-  $("#sourceEmpty").hidden = false;
-  $("#sourceEmpty").innerHTML = "<b>DOCX 已转换为可编辑版本</b><span>标题、粗体、列表和表格会尽量保留；左侧 PDF 对照仅在上传 PDF 时显示。</span>";
-  $("#fidelityHint").textContent = "DOCX 模式 · 格式保留更好";
-  setStatus(result.messages.length ? "DOCX 已转换，建议检查复杂文本框或图片位置。" : "DOCX 已转换，可以直接修改。", false);
-}
+async function exportLayoutPdf(){if(!pageRecords.length)return setStatus("请先上传 PDF",true);setStatus("正在本地生成原版式 PDF…");const {jsPDF}=await import("https://esm.sh/jspdf@2.5.2");let doc;for(const [index,record] of pageRecords.entries()){const out=document.createElement("canvas");out.width=record.canvas.width;out.height=record.canvas.height;const ctx=out.getContext("2d");ctx.drawImage(record.canvas,0,0);for(const block of record.blocks.filter(b=>b.modified)){ctx.fillStyle=block.background;ctx.fillRect(block.x-2,block.y-1,block.width+4,Math.max(block.height,block.fontSize*1.3)+2);ctx.fillStyle=block.color;ctx.font=`${block.fontSize}px 'Microsoft YaHei','Noto Sans CJK SC',sans-serif`;ctx.textBaseline="top";ctx.fillText(block.text,block.x,block.y)}const format=[record.pdfWidth,record.pdfHeight];if(!doc)doc=new jsPDF({unit:"pt",format,orientation:record.pdfWidth>record.pdfHeight?"landscape":"portrait",compress:true});else doc.addPage(format,record.pdfWidth>record.pdfHeight?"landscape":"portrait");doc.addImage(out.toDataURL("image/jpeg",.94),"JPEG",0,0,record.pdfWidth,record.pdfHeight,undefined,"FAST")}doc.save(`${currentFileName}.pdf`);setStatus("原版式 PDF 已导出")}
 
-function importPlain(text, suffix) {
-  $("#resumeEditor").innerHTML = `<section class="imported-page">${text.split(/\n{2,}/).map((part) => `<p>${escapeHtml(part).replace(/\n/g, "<br>")}</p>`).join("")}</section>`;
-  $("#fidelityHint").textContent = suffix === "md" ? "Markdown 文本" : "纯文本";
-  setStatus("文本已载入，可以直接修改。", false);
-}
 
-$("#resumeEditor").addEventListener("input", persist);
-function persist() { localStorage.setItem(storageKey, $("#resumeEditor").innerHTML); }
-function setStatus(message, failed = false) { $("#fileStatus").textContent = message; $("#fileStatus").classList.toggle("error", failed); }
-
-lab.querySelectorAll("[data-command]").forEach((button) => button.addEventListener("click", () => { document.execCommand(button.dataset.command, false); $("#resumeEditor").focus(); persist(); }));
-$("#blockFormat").addEventListener("change", ({ target }) => { document.execCommand("formatBlock", false, target.value); $("#resumeEditor").focus(); persist(); });
-
-$("#clearDocument").addEventListener("click", () => {
-  if (!confirm("清空当前编辑内容和本地保存的简历？")) return;
-  $("#resumeEditor").innerHTML = ""; localStorage.removeItem(storageKey); revokeSource();
-  $("#sourcePdf").hidden = true; $("#sourceEmpty").hidden = false; $("#sourceEmpty").textContent = "上传后在这里显示原 PDF；DOCX 将直接转换为编辑版。";
-  $("#fidelityHint").textContent = "等待上传"; setStatus("已清空");
-});
-
-$("#exportMarkdown").addEventListener("click", () => download(`${currentFileName}.md`, toMarkdown($("#resumeEditor")), "text/markdown;charset=utf-8"));
-$("#exportWord").addEventListener("click", () => {
-  const html = `<!doctype html><html><head><meta charset="utf-8"><style>${printStyles()}</style></head><body>${$("#resumeEditor").innerHTML}</body></html>`;
-  download(`${currentFileName}.doc`, "\ufeff" + html, "application/msword;charset=utf-8");
-});
-$("#exportPdf").addEventListener("click", () => {
-  if (!$("#resumeEditor").innerText.trim()) return setStatus("请先上传或填写简历内容", true);
-  const printable = window.open("", "_blank");
-  if (!printable) return setStatus("浏览器阻止了打印窗口，请允许本站弹出窗口", true);
-  printable.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${escapeHtml(currentFileName)}</title><style>${printStyles()}</style></head><body>${$("#resumeEditor").innerHTML}</body></html>`);
-  printable.document.close(); printable.focus(); setTimeout(() => printable.print(), 300);
-});
-
-function toMarkdown(root) {
-  return [...root.querySelectorAll("h1,h2,h3,p,li")].map((node) => {
-    const text = node.innerText.trim(); if (!text) return "";
-    if (node.tagName === "H1") return `# ${text}`; if (node.tagName === "H2") return `## ${text}`; if (node.tagName === "H3") return `### ${text}`; if (node.tagName === "LI") return `- ${text}`; return text;
-  }).filter(Boolean).join("\n\n");
-}
-function printStyles() { return "@page{size:A4;margin:13mm}*{box-sizing:border-box}body{width:184mm;margin:0 auto;color:#172f29;font:10.5pt/1.55 'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif}section.imported-page{min-height:270mm;break-after:page;padding:0}section.imported-page:last-child{break-after:auto}h1,h2,h3{color:#123e34;margin:10px 0 5px}h2{font-size:16pt;border-bottom:1.5px solid #224f43;padding-bottom:3px}h3{font-size:12pt}p{margin:3px 0;white-space:pre-wrap}ul,ol{margin:4px 0;padding-left:20px}table{width:100%;border-collapse:collapse}td,th{border:1px solid #ccd4cf;padding:5px}img{max-width:100%}"; }
-function download(name, content, type) { const url=URL.createObjectURL(new Blob([content],{type})); const link=document.createElement("a"); link.href=url; link.download=name; link.click(); setTimeout(()=>URL.revokeObjectURL(url),1000); }
-function revokeSource() { if(sourceUrl) URL.revokeObjectURL(sourceUrl); sourceUrl=""; $("#sourcePdf").removeAttribute("src"); }
-function safeName(value) { return value.replace(/[\\/:*?"<>|]/g, "-").slice(0, 90); }
-function escapeHtml(value="") { return String(value).replace(/[&<>'"]/g,(char)=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"})[char]); }
+async function importDocx(file){const mod=await import("https://esm.sh/mammoth@1.9.0/mammoth.browser.min.js"),mammoth=mod.default||mod,result=await mammoth.convertToHtml({arrayBuffer:await file.arrayBuffer()});$("#resumeEditor").innerHTML=`<section class="imported-page">${result.value}</section>`;$("#sourcePdf").hidden=true;$("#sourceEmpty").hidden=false;$("#sourceEmpty").innerHTML="<b>DOCX 已转换为可编辑版本</b><span>标题、粗体、列表和表格会尽量保留。</span>";$("#fidelityHint").textContent="DOCX 模式";setStatus("DOCX 已转换，可以直接修改。");}
+function importPlain(text,suffix){$("#resumeEditor").innerHTML=`<section class="imported-page">${text.split(/\n{2,}/).map(part=>`<p>${escapeHtml(part).replace(/\n/g,"<br>")}</p>`).join("")}</section>`;$("#fidelityHint").textContent=suffix==="md"?"Markdown 文本":"纯文本";setStatus("文本已载入，可以直接修改。");}
+$("#resumeEditor").addEventListener("input",persist);function persist(){localStorage.setItem(storageKey,$("#resumeEditor").innerHTML)}function setStatus(message,failed=false){$("#fileStatus").textContent=message;$("#fileStatus").classList.toggle("error",failed)}
+lab.querySelectorAll("[data-command]").forEach(button=>button.addEventListener("click",()=>{document.execCommand(button.dataset.command,false);$("#resumeEditor").focus();persist()}));$("#blockFormat").addEventListener("change",({target})=>{document.execCommand("formatBlock",false,target.value);$("#resumeEditor").focus();persist()});
+$("#clearDocument").addEventListener("click",()=>{if(!confirm("清空当前编辑内容？"))return;$("#resumeEditor").innerHTML="";localStorage.removeItem(storageKey);revokeSource();pageRecords=[];$("#pdfPages").innerHTML='<div class="source-empty">请上传 PDF。照片、图形和页面样式会完整作为底图保留。</div>';$("#blockForm").hidden=true;$("#blockEmpty").hidden=false;setStatus("已清空")});
+$("#exportPdf").addEventListener("click",()=>activeMode==="layout"?exportLayoutPdf():exportReflowPdf());
+$("#exportMarkdown").addEventListener("click",()=>download(`${currentFileName}.md`,toMarkdown($("#resumeEditor")),"text/markdown;charset=utf-8"));$("#exportWord").addEventListener("click",()=>download(`${currentFileName}.doc`,"\ufeff"+`<!doctype html><meta charset="utf-8"><style>${printStyles()}</style>${$("#resumeEditor").innerHTML}`,"application/msword;charset=utf-8"));
+function exportReflowPdf(){if(!$("#resumeEditor").innerText.trim())return setStatus("请先填写内容",true);const win=window.open("","_blank");if(!win)return setStatus("请允许本站弹出窗口",true);win.document.write(`<!doctype html><meta charset="utf-8"><title>${escapeHtml(currentFileName)}</title><style>${printStyles()}</style>${$("#resumeEditor").innerHTML}`);win.document.close();setTimeout(()=>win.print(),300)}
+function toMarkdown(root){return[...root.querySelectorAll("h1,h2,h3,p,li")].map(node=>{const text=node.innerText.trim();if(!text)return"";if(node.tagName==="H2")return`## ${text}`;if(node.tagName==="H3")return`### ${text}`;if(node.tagName==="LI")return`- ${text}`;return text}).filter(Boolean).join("\n\n")}
+function printStyles(){return"@page{size:A4;margin:13mm}body{color:#172f29;font:10.5pt/1.55 'Microsoft YaHei',sans-serif}h2{font-size:16pt;border-bottom:1.5px solid #224f43}h3{font-size:12pt}table{width:100%;border-collapse:collapse}td,th{border:1px solid #ccd4cf;padding:5px}img{max-width:100%}"}
+function download(name,content,type){const url=URL.createObjectURL(new Blob([content],{type})),link=document.createElement("a");link.href=url;link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}function revokeSource(){if(sourceUrl)URL.revokeObjectURL(sourceUrl);sourceUrl="";$("#sourcePdf").removeAttribute("src")}function safeName(value){return value.replace(/[\\/:*?"<>|]/g,"-").slice(0,90)}function escapeHtml(value=""){return String(value).replace(/[&<>'"]/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"})[char])}
