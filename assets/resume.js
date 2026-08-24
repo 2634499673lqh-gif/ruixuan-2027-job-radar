@@ -80,7 +80,7 @@ function groupRuns(items, viewport, canvas, pageNo) {
       const x=Math.min(...visible.map(i=>i.x)), y=Math.min(...visible.map(i=>i.y)), end=Math.max(...visible.map(i=>i.x+i.width));
       const height=Math.max(...visible.map(i=>i.height)), fontSize=Math.max(...visible.map(i=>i.fontSize)), fontName=visible[0].fontName;
       const original=parts.map(i=>i.text).join("").replace(/\s+/g," ").trim();
-      runs.push({ id:`${pageNo}-${rowIndex}-${runs.length}`, pageNo, original, text:original, fontName, x, y, width:Math.max(end-x,24), height:Math.max(height,16), fontSize, background:sampleBackground(canvas,x,y,end-x,height), color:sampleInk(canvas,x,y,end-x,height), modified:false }); parts=[];
+      runs.push({ id:`${pageNo}-${rowIndex}-${runs.length}`, pageNo, original, text:original, fontName, x, y, layoutY:y, width:Math.max(end-x,24), height:Math.max(height,16), fontSize, lineHeight:Math.max(height,fontSize*1.25), background:sampleBackground(canvas,x,y,end-x,height), color:sampleInk(canvas,x,y,end-x,height), modified:false }); parts=[];
     };
     for(const item of row.items){const previous=parts.at(-1),gap=previous?item.x-(previous.x+previous.width):0;const split=previous&&(item.fontName!==previous.fontName||Math.abs(item.fontSize-previous.fontSize)>1||gap>Math.max(16,item.fontSize*1.8));if(split)flush();parts.push(item);} flush();
   });
@@ -92,7 +92,7 @@ function sampleInk(canvas,x,y,w,h) { const d=canvas.getContext("2d").getImageDat
 
 function toggleEditing() {
   editing=!editing; lab.classList.toggle("editing",editing); $("#editToggle").textContent=editing?"完成编辑":"开启编辑";
-  $("#pageHint").textContent=editing?"直接点击原文字并输入；Enter 完成，Esc 恢复":"预览模式 · 页面不会被意外改动";
+  $("#pageHint").textContent=editing?"直接点击原文字输入；Enter 换行，Ctrl+Enter 完成，Esc 恢复":"预览模式 · 页面不会被意外改动";
   for(const block of pageRecords.flatMap(page=>page.blocks)){block.element.contentEditable=editing?"plaintext-only":"false";block.element.tabIndex=editing?0:-1;}
   if(!editing) document.activeElement?.blur();
 }
@@ -101,21 +101,63 @@ function beginInlineEdit(block, element) {
   redrawPage(pageRecords[block.pageNo-1],block); element.textContent=block.text; paintInlineBlock(block,true);
 }
 function updateInlineEdit(block, element) {
-  block.text=element.innerText.replace(/[\r\n]+/g," "); if(element.innerText!==block.text)element.innerText=block.text;
-  block.modified=block.text!==block.original; paintInlineBlock(block,true); fitInlineText(block,element); scheduleInlineSave();
+  block.text=normalizeEditedText(element.innerText);
+  block.modified=block.text!==block.original;
+  fitInlineText(block,element);
+  reflowPage(pageRecords[block.pageNo-1]);
+  paintInlineBlock(block,true);
+  scheduleInlineSave();
 }
 function finishInlineEdit(block, element) {
-  block.text=element.innerText.replace(/[\r\n]+/g," ").trim(); block.modified=block.text!==block.original; element.classList.remove("inline-active","inline-overflow");
-  renderBlock(block); if(selectedBlock===block)selectedBlock=null; saveEdits(); setStatus(block.modified?"修改已自动保存在这台电脑":"未改变原文字");
+  block.text=normalizeEditedText(element.innerText).replace(/\n+$/g,"");
+  block.modified=block.text!==block.original;
+  element.classList.remove("inline-active","inline-overflow");
+  if(selectedBlock===block)selectedBlock=null;
+  renderBlock(block);
+  saveEdits();
+  setStatus(block.modified?"修改及换行已自动保存在这台电脑":"未改变原文字");
 }
-function handleInlineKey(event, block, element) { if(event.key==="Enter"){event.preventDefault();element.blur();} if(event.key==="Escape"){event.preventDefault();block.text=block.original;block.modified=false;element.textContent=block.original;element.blur();} }
+function handleInlineKey(event, block, element) {
+  if(event.key==="Enter"&&(event.ctrlKey||event.metaKey)){event.preventDefault();element.blur();}
+  if(event.key==="Escape"){event.preventDefault();block.text=block.original;block.modified=false;element.textContent=block.original;reflowPage(pageRecords[block.pageNo-1]);element.blur();}
+}
 function paintInlineBlock(block,active=false){const el=block.element;el.style.background=block.background;el.style.boxShadow=`0 0 0 2px ${block.background}`;el.style.color=block.color;if(active)el.classList.add("inline-active");}
-function fitInlineText(block,element){const record=pageRecords[block.pageNo-1],ctx=record.canvas.getContext("2d");ctx.font=`${block.fontSize}px "${block.fontName}"`;const needed=Math.max(1,ctx.measureText(block.text).width),scale=Math.min(1,block.width/needed),fitted=Math.max(.76,scale);block.renderFontSize=block.fontSize*fitted;element.style.fontSize=`${block.renderFontSize/record.width*100}cqw`;element.classList.toggle("inline-overflow",scale<.76);}
+function normalizeEditedText(text){return String(text??"").replace(/\r\n?/g,"\n").replace(/\u00a0/g," ");}
+function textLines(block){return normalizeEditedText(block.text).split("\n");}
+function extraHeight(block){return Math.max(0,textLines(block).length-1)*block.lineHeight;}
+function fitInlineText(block,element){
+  const record=pageRecords[block.pageNo-1],ctx=record.canvas.getContext("2d");
+  ctx.font=`${block.fontSize}px "${block.fontName}"`;
+  const needed=Math.max(1,...textLines(block).map(line=>ctx.measureText(line||" ").width)),scale=Math.min(1,block.width/needed),fitted=Math.max(.76,scale);
+  block.renderFontSize=block.fontSize*fitted;
+  element.style.fontSize=`${block.renderFontSize/record.width*100}cqw`;
+  element.style.lineHeight=String(block.lineHeight/block.renderFontSize);
+  element.classList.toggle("inline-overflow",scale<.76);
+}
 let inlineSaveTimer; function scheduleInlineSave(){clearTimeout(inlineSaveTimer);inlineSaveTimer=setTimeout(saveEdits,350);}
-function renderBlock(block){const el=block.element,record=pageRecords[block.pageNo-1];el.classList.toggle("modified",block.modified);el.textContent="";el.style.background="transparent";el.style.boxShadow="none";el.style.color="transparent";el.style.fontSize=`${block.fontSize/record.width*100}cqw`;if(block.modified)fitInlineText(block,el);redrawPage(record);}
+function reflowPage(record){
+  const sources=record.blocks.filter(block=>extraHeight(block)>0);
+  for(const block of record.blocks){
+    block.layoutY=block.y+sources.reduce((shift,source)=>shift+(source.y<block.y-1?extraHeight(source):0),0);
+    block.element.style.top=`${block.layoutY/record.height*100}%`;
+    block.element.style.minHeight=`${(block.height+extraHeight(block))/record.height*100}%`;
+  }
+  redrawPage(record,selectedBlock?.pageNo===record.pageNo?selectedBlock:null);
+}
+function renderBlock(block){
+  const el=block.element,record=pageRecords[block.pageNo-1];
+  el.classList.toggle("modified",block.modified);el.textContent="";el.style.background="transparent";el.style.boxShadow="none";el.style.color="transparent";el.style.fontSize=`${block.fontSize/record.width*100}cqw`;
+  if(block.modified)fitInlineText(block,el);
+  reflowPage(record);
+}
 function redrawPage(record,activeBlock=null){
   const ctx=record.canvas.getContext("2d");ctx.clearRect(0,0,record.canvas.width,record.canvas.height);ctx.drawImage(record.baseCanvas,0,0);
-  for(const block of record.blocks){if(block===activeBlock){eraseOriginal(ctx,block);continue;}if(!block.modified)continue;eraseOriginal(ctx,block);ctx.fillStyle=block.color;ctx.font=`${block.renderFontSize||block.fontSize}px "${block.fontName}","Microsoft YaHei",sans-serif`;ctx.textBaseline="top";ctx.fillText(block.text,block.x,block.y);}
+  for(const block of record.blocks){if(block===activeBlock||block.modified||Math.abs(block.layoutY-block.y)>.5)eraseOriginal(ctx,block);}
+  for(const block of record.blocks){if(block===activeBlock)continue;if(!block.modified&&Math.abs(block.layoutY-block.y)<=.5)continue;drawBlock(ctx,block);}
+}
+function drawBlock(ctx,block){
+  ctx.fillStyle=block.color;ctx.font=`${block.renderFontSize||block.fontSize}px "${block.fontName}","Microsoft YaHei",sans-serif`;ctx.textBaseline="top";
+  textLines(block).forEach((line,index)=>ctx.fillText(line,block.x,block.layoutY+index*block.lineHeight));
 }
 function eraseOriginal(ctx,block){ctx.fillStyle=block.background;ctx.fillRect(block.x-3,block.y-2,block.width+6,Math.max(block.height,block.fontSize*1.3)+4);}
 async function resetAllEdits(){if(!pageRecords.length||!confirm("恢复原 PDF，清除全部文字修改？"))return;document.activeElement?.blur();for(const block of pageRecords.flatMap(p=>p.blocks)){block.text=block.original;block.modified=false;renderBlock(block);}selectedBlock=null;await saveEdits();setStatus("已恢复原稿");}
