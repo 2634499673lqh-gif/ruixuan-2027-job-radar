@@ -53,9 +53,10 @@ async function renderPage(page, pageNo) {
   const overlay = document.createElement("div"); overlay.className = "pdf-text-overlay";
   shell.append(canvas, overlay); $("#pdfPages").append(shell);
   await page.render({ canvasContext: canvas.getContext("2d"), viewport }).promise;
+  const baseCanvas=document.createElement("canvas"); baseCanvas.width=canvas.width; baseCanvas.height=canvas.height; baseCanvas.getContext("2d").drawImage(canvas,0,0);
   const content = await page.getTextContent();
   const blocks = groupRuns(content.items, viewport, canvas, pageNo);
-  const record = { pageNo, canvas, overlay, blocks, width: viewport.width, height: viewport.height };
+  const record = { pageNo, canvas, baseCanvas, overlay, blocks, width: viewport.width, height: viewport.height };
   pageRecords.push(record);
   for (const block of blocks) {
     const hit = document.createElement("div"); hit.className = "pdf-text-block"; hit.title = block.original; hit.setAttribute("role","textbox"); hit.setAttribute("aria-label",`编辑：${block.original}`); hit.tabIndex = -1;
@@ -97,7 +98,7 @@ function toggleEditing() {
 }
 function beginInlineEdit(block, element) {
   if(!editing)return; selectedBlock=block; lab.querySelectorAll(".pdf-text-block.inline-active").forEach(el=>el.classList.remove("inline-active")); element.classList.add("inline-active");
-  if(!block.modified)element.textContent=block.original; paintInlineBlock(block,true);
+  redrawPage(pageRecords[block.pageNo-1],block); element.textContent=block.text; paintInlineBlock(block,true);
 }
 function updateInlineEdit(block, element) {
   block.text=element.innerText.replace(/[\r\n]+/g," "); if(element.innerText!==block.text)element.innerText=block.text;
@@ -108,10 +109,15 @@ function finishInlineEdit(block, element) {
   renderBlock(block); if(selectedBlock===block)selectedBlock=null; saveEdits(); setStatus(block.modified?"修改已自动保存在这台电脑":"未改变原文字");
 }
 function handleInlineKey(event, block, element) { if(event.key==="Enter"){event.preventDefault();element.blur();} if(event.key==="Escape"){event.preventDefault();block.text=block.original;block.modified=false;element.textContent=block.original;element.blur();} }
-function paintInlineBlock(block,active=false){const el=block.element;el.style.background=block.background;el.style.boxShadow=`0 0 0 2px ${block.background}`;el.style.color=block.color;if(!active)el.textContent=block.text;if(active)el.classList.add("inline-active");}
-function fitInlineText(block,element){const record=pageRecords[block.pageNo-1],ctx=record.canvas.getContext("2d");ctx.font=`${block.fontSize}px "${block.fontName}"`;const needed=Math.max(1,ctx.measureText(block.text).width),scale=Math.min(1,block.width/needed),fitted=Math.max(.76,scale);element.style.fontSize=`${block.fontSize*fitted/record.width*100}cqw`;element.classList.toggle("inline-overflow",scale<.76);}
+function paintInlineBlock(block,active=false){const el=block.element;el.style.background=block.background;el.style.boxShadow=`0 0 0 2px ${block.background}`;el.style.color=block.color;if(active)el.classList.add("inline-active");}
+function fitInlineText(block,element){const record=pageRecords[block.pageNo-1],ctx=record.canvas.getContext("2d");ctx.font=`${block.fontSize}px "${block.fontName}"`;const needed=Math.max(1,ctx.measureText(block.text).width),scale=Math.min(1,block.width/needed),fitted=Math.max(.76,scale);block.renderFontSize=block.fontSize*fitted;element.style.fontSize=`${block.renderFontSize/record.width*100}cqw`;element.classList.toggle("inline-overflow",scale<.76);}
 let inlineSaveTimer; function scheduleInlineSave(){clearTimeout(inlineSaveTimer);inlineSaveTimer=setTimeout(saveEdits,350);}
-function renderBlock(block){const el=block.element,record=pageRecords[block.pageNo-1];el.classList.toggle("modified",block.modified);el.textContent=block.modified?block.text:"";el.style.background=block.modified?block.background:"transparent";el.style.boxShadow=block.modified?`0 0 0 2px ${block.background}`:"none";el.style.color=block.color;el.style.fontSize=`${block.fontSize/record.width*100}cqw`;if(block.modified)fitInlineText(block,el);}
+function renderBlock(block){const el=block.element,record=pageRecords[block.pageNo-1];el.classList.toggle("modified",block.modified);el.textContent="";el.style.background="transparent";el.style.boxShadow="none";el.style.color="transparent";el.style.fontSize=`${block.fontSize/record.width*100}cqw`;if(block.modified)fitInlineText(block,el);redrawPage(record);}
+function redrawPage(record,activeBlock=null){
+  const ctx=record.canvas.getContext("2d");ctx.clearRect(0,0,record.canvas.width,record.canvas.height);ctx.drawImage(record.baseCanvas,0,0);
+  for(const block of record.blocks){if(block===activeBlock){eraseOriginal(ctx,block);continue;}if(!block.modified)continue;eraseOriginal(ctx,block);ctx.fillStyle=block.color;ctx.font=`${block.renderFontSize||block.fontSize}px "${block.fontName}","Microsoft YaHei",sans-serif`;ctx.textBaseline="top";ctx.fillText(block.text,block.x,block.y);}
+}
+function eraseOriginal(ctx,block){ctx.fillStyle=block.background;ctx.fillRect(block.x-3,block.y-2,block.width+6,Math.max(block.height,block.fontSize*1.3)+4);}
 async function resetAllEdits(){if(!pageRecords.length||!confirm("恢复原 PDF，清除全部文字修改？"))return;document.activeElement?.blur();for(const block of pageRecords.flatMap(p=>p.blocks)){block.text=block.original;block.modified=false;renderBlock(block);}selectedBlock=null;await saveEdits();setStatus("已恢复原稿");}
 function applyPrivacy(){ const enabled=$("#privacyMode").checked, pattern=/(?:1[3-9]\d{9})|(?:[\w.+-]+@[\w.-]+\.[A-Za-z]{2,})/; lab.classList.toggle("privacy-on",enabled); for(const block of pageRecords.flatMap(page=>page.blocks)) block.element?.classList.toggle("privacy-sensitive",enabled&&pattern.test(block.original)); for(const [index,record] of pageRecords.entries()){let mask=record.overlay.querySelector(".privacy-photo-mask");if(index===0&&!mask){mask=document.createElement("div");mask.className="privacy-photo-mask";record.overlay.append(mask);}if(mask)mask.hidden=!enabled;} }
 function printResume(){ if(!pageRecords.length)return; document.activeElement?.blur(); const oldTitle=document.title; document.title=currentFileName; lab.classList.add("printing"); setTimeout(()=>{window.print(); setTimeout(()=>{document.title=oldTitle;lab.classList.remove("printing");},300);},50); }
