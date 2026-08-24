@@ -1,5 +1,5 @@
 {
-  "lastSuccessfulCheck": "2026-08-24T06:28:18.061Z",
+  "lastSuccessfulCheck": "2026-08-24T09:01:20.226Z",
   "lastRunStatus": "partial",
   "sourceCount": 62,
   "successfulSourceCount": 59,
@@ -20,11 +20,11 @@
       "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"http://gzw.sz.gov.cn/\", waiting until \"domcontentloaded\"\n"
     }
   ],
-  "verifiedCount": 36,
+  "verifiedCount": 35,
   "leadCount": 10,
-  "activeCount": 46,
-  "archivedCount": 6,
-  "addedCount": 1,
-  "archivedThisRun": 0,
+  "activeCount": 45,
+  "archivedCount": 7,
+  "addedCount": 0,
+  "archivedThisRun": 1,
   "rejectedTitleCount": 0
 }

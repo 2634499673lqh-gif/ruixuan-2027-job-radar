@@ -1,6 +1,14 @@
 {
   "archivedJobs": [
     {
+      "company": "盈峰环境",
+      "role": "制造储备干部 Manufacturing Reserve Cadre",
+      "city": "佛山",
+      "archivedAt": "2026-08-24",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/inforeenviro/182015#/job/d57aec64-322e-478e-9819-0c19a79c1e12"
+    },
+    {
       "company": "吉利控股集团",
       "role": "人力管培生",
       "city": "广东省（具体城市待核验）",
@@ -50,6 +58,12 @@
     }
   ],
   "changeLog": [
+    {
+      "date": "2026-08-24 17:01",
+      "type": "归档",
+      "title": "自动核查：新增0条，归档1条，清理误识别0条",
+      "detail": "成功读取59/62个可信公开来源；失败3个。企业介绍和非岗位长文本不会作为岗位名称入库。"
+    },
     {
       "date": "2026-08-24 14:28",
       "type": "新增",
