@@ -13,11 +13,8 @@ window.addEventListener("open-resume-lab", ({ detail }) => openLab(detail));
 $("#resumeFile").addEventListener("change", ({ target }) => target.files[0] && importFile(target.files[0], true));
 $("#editToggle").addEventListener("click", toggleEditing);
 $("#privacyMode").addEventListener("change", applyPrivacy);
-$("#applyBlock").addEventListener("click", applySelectedEdit);
-$("#resetBlock").addEventListener("click", resetSelectedBlock);
 $("#resetTemplateEdits").addEventListener("click", resetAllEdits);
 $("#exportPdf").addEventListener("click", printResume);
-$("#editedBlockText").addEventListener("input", updateOverflowHint);
 
 function openLab(job) {
   $("#editorJobContext").textContent = job ? `正在为「${job.company} — ${job.role}」制作岗位版；原版式不会改变。` : "PDF 是唯一基准：不换模板、不改内容，只修改你选中的文字。";
@@ -45,7 +42,6 @@ async function renderPdf(data) {
   for (let pageNo = 1; pageNo <= document.numPages; pageNo++) await renderPage(await document.getPage(pageNo), pageNo);
   $("#editToggle").disabled = false; $("#resetTemplateEdits").disabled = false; $("#exportPdf").disabled = false;
   $("#editToggle").textContent = "开启编辑"; $("#pageHint").textContent = `${document.numPages} 页 · 原页面尺寸与图像已保留`;
-  $("#blockForm").hidden = true; $("#blockEmpty").hidden = false;
   applyPrivacy();
 }
 
@@ -62,9 +58,9 @@ async function renderPage(page, pageNo) {
   const record = { pageNo, canvas, overlay, blocks, width: viewport.width, height: viewport.height };
   pageRecords.push(record);
   for (const block of blocks) {
-    const hit = document.createElement("button"); hit.type = "button"; hit.className = "pdf-text-block"; hit.title = block.original;
-    Object.assign(hit.style, { left:`${block.x / viewport.width * 100}%`, top:`${block.y / viewport.height * 100}%`, width:`${block.width / viewport.width * 100}%`, minHeight:`${block.height / viewport.height * 100}%`, fontSize:`${block.fontSize / viewport.width * 100}cqw`, fontFamily:`"${block.fontName}"` });
-    hit.addEventListener("click", () => editing && selectBlock(block, hit)); block.element = hit; overlay.append(hit);
+    const hit = document.createElement("div"); hit.className = "pdf-text-block"; hit.title = block.original; hit.setAttribute("role","textbox"); hit.setAttribute("aria-label",`编辑：${block.original}`); hit.tabIndex = -1;
+    Object.assign(hit.style, { left:`${block.x / viewport.width * 100}%`, top:`${block.y / viewport.height * 100}%`, width:`${block.width / viewport.width * 100}%`, minHeight:`${block.height / viewport.height * 100}%`, fontSize:`${block.fontSize / viewport.width * 100}cqw`, fontFamily:`"${block.fontName}","Microsoft YaHei",sans-serif` });
+    hit.addEventListener("focus", () => beginInlineEdit(block, hit)); hit.addEventListener("input", () => updateInlineEdit(block, hit)); hit.addEventListener("blur", () => finishInlineEdit(block, hit)); hit.addEventListener("keydown", (event) => handleInlineKey(event, block, hit)); block.element = hit; overlay.append(hit);
   }
 }
 
@@ -93,17 +89,32 @@ function groupRuns(items, viewport, canvas, pageNo) {
 function sampleBackground(canvas,x,y,w,h) { const ctx=canvas.getContext("2d"), points=[[x-3,y+h/2],[x+w+3,y+h/2],[x+w/2,y-3],[x+w/2,y+h+3]]; let rgb=[0,0,0],n=0; for(const [px,py] of points){if(px<0||py<0||px>=canvas.width||py>=canvas.height)continue;const d=ctx.getImageData(Math.floor(px),Math.floor(py),1,1).data;rgb=rgb.map((v,i)=>v+d[i]);n++;} return n?`rgb(${rgb.map(v=>Math.round(v/n)).join(",")})`:"white"; }
 function sampleInk(canvas,x,y,w,h) { const d=canvas.getContext("2d").getImageData(Math.max(0,Math.floor(x)),Math.max(0,Math.floor(y)),Math.max(1,Math.min(canvas.width-x,Math.ceil(w))),Math.max(1,Math.min(canvas.height-y,Math.ceil(h)))).data; let rgb=[0,0,0],n=0; for(let i=0;i<d.length;i+=4){const lum=.2126*d[i]+.7152*d[i+1]+.0722*d[i+2];if(lum<145){rgb[0]+=d[i];rgb[1]+=d[i+1];rgb[2]+=d[i+2];n++;}} return n?`rgb(${rgb.map(v=>Math.round(v/n)).join(",")})`:"#172f29"; }
 
-function toggleEditing() { editing=!editing; lab.classList.toggle("editing",editing); $("#editToggle").textContent=editing?"完成编辑":"开启编辑"; $("#pageHint").textContent=editing?"点击任意一行文字进行修改":"预览模式 · 页面不会被意外改动"; if(!editing) clearSelection(); }
-function selectBlock(block, element) { lab.querySelectorAll(".pdf-text-block.selected").forEach(el=>el.classList.remove("selected")); element.classList.add("selected"); selectedBlock=block; $("#blockEmpty").hidden=true; $("#blockForm").hidden=false; $("#blockPosition").textContent=`第 ${block.pageNo} 页`; $("#originalBlockText").value=block.original; $("#editedBlockText").value=block.text; updateOverflowHint(); $("#editedBlockText").focus(); }
-function clearSelection(){ lab.querySelectorAll(".pdf-text-block.selected").forEach(el=>el.classList.remove("selected")); selectedBlock=null; $("#blockForm").hidden=true; $("#blockEmpty").hidden=false; }
-function updateOverflowHint(){ if(!selectedBlock)return; const ctx=pageRecords[selectedBlock.pageNo-1].canvas.getContext("2d"); ctx.font=`${selectedBlock.fontSize}px "${selectedBlock.fontName}"`; const width=ctx.measureText($("#editedBlockText").value).width, overflow=width>selectedBlock.width*1.08; $("#overflowHint").textContent=overflow?"新文字更长，可能超出原位置；建议缩短内容。":"长度适合原位置。"; $("#overflowHint").classList.toggle("warning",overflow); }
-function applySelectedEdit(){ if(!selectedBlock)return; selectedBlock.text=$("#editedBlockText").value.trim(); selectedBlock.modified=selectedBlock.text!==selectedBlock.original; renderBlock(selectedBlock); saveEdits(); setStatus("修改已自动保存在这台电脑"); }
-function resetSelectedBlock(){ if(!selectedBlock)return; selectedBlock.text=selectedBlock.original; selectedBlock.modified=false; renderBlock(selectedBlock); $("#editedBlockText").value=selectedBlock.original; saveEdits(); }
-function renderBlock(block){ const el=block.element; el.classList.toggle("modified",block.modified); el.textContent=block.modified?block.text:""; el.style.background=block.modified?block.background:"transparent"; el.style.color=block.color; }
-async function resetAllEdits(){ if(!pageRecords.length||!confirm("恢复原 PDF，清除全部文字修改？"))return; for(const block of pageRecords.flatMap(p=>p.blocks)){block.text=block.original;block.modified=false;renderBlock(block);} clearSelection(); await saveEdits(); setStatus("已恢复原稿"); }
-
+function toggleEditing() {
+  editing=!editing; lab.classList.toggle("editing",editing); $("#editToggle").textContent=editing?"完成编辑":"开启编辑";
+  $("#pageHint").textContent=editing?"直接点击原文字并输入；Enter 完成，Esc 恢复":"预览模式 · 页面不会被意外改动";
+  for(const block of pageRecords.flatMap(page=>page.blocks)){block.element.contentEditable=editing?"plaintext-only":"false";block.element.tabIndex=editing?0:-1;}
+  if(!editing) document.activeElement?.blur();
+}
+function beginInlineEdit(block, element) {
+  if(!editing)return; selectedBlock=block; lab.querySelectorAll(".pdf-text-block.inline-active").forEach(el=>el.classList.remove("inline-active")); element.classList.add("inline-active");
+  if(!block.modified)element.textContent=block.original; paintInlineBlock(block,true);
+}
+function updateInlineEdit(block, element) {
+  block.text=element.innerText.replace(/[\r\n]+/g," "); if(element.innerText!==block.text)element.innerText=block.text;
+  block.modified=block.text!==block.original; paintInlineBlock(block,true); fitInlineText(block,element); scheduleInlineSave();
+}
+function finishInlineEdit(block, element) {
+  block.text=element.innerText.replace(/[\r\n]+/g," ").trim(); block.modified=block.text!==block.original; element.classList.remove("inline-active","inline-overflow");
+  renderBlock(block); if(selectedBlock===block)selectedBlock=null; saveEdits(); setStatus(block.modified?"修改已自动保存在这台电脑":"未改变原文字");
+}
+function handleInlineKey(event, block, element) { if(event.key==="Enter"){event.preventDefault();element.blur();} if(event.key==="Escape"){event.preventDefault();block.text=block.original;block.modified=false;element.textContent=block.original;element.blur();} }
+function paintInlineBlock(block,active=false){const el=block.element;el.style.background=block.background;el.style.boxShadow=`0 0 0 2px ${block.background}`;el.style.color=block.color;if(!active)el.textContent=block.text;if(active)el.classList.add("inline-active");}
+function fitInlineText(block,element){const record=pageRecords[block.pageNo-1],ctx=record.canvas.getContext("2d");ctx.font=`${block.fontSize}px "${block.fontName}"`;const needed=Math.max(1,ctx.measureText(block.text).width),scale=Math.min(1,block.width/needed),fitted=Math.max(.76,scale);element.style.fontSize=`${block.fontSize*fitted/record.width*100}cqw`;element.classList.toggle("inline-overflow",scale<.76);}
+let inlineSaveTimer; function scheduleInlineSave(){clearTimeout(inlineSaveTimer);inlineSaveTimer=setTimeout(saveEdits,350);}
+function renderBlock(block){const el=block.element,record=pageRecords[block.pageNo-1];el.classList.toggle("modified",block.modified);el.textContent=block.modified?block.text:"";el.style.background=block.modified?block.background:"transparent";el.style.boxShadow=block.modified?`0 0 0 2px ${block.background}`:"none";el.style.color=block.color;el.style.fontSize=`${block.fontSize/record.width*100}cqw`;if(block.modified)fitInlineText(block,el);}
+async function resetAllEdits(){if(!pageRecords.length||!confirm("恢复原 PDF，清除全部文字修改？"))return;document.activeElement?.blur();for(const block of pageRecords.flatMap(p=>p.blocks)){block.text=block.original;block.modified=false;renderBlock(block);}selectedBlock=null;await saveEdits();setStatus("已恢复原稿");}
 function applyPrivacy(){ const enabled=$("#privacyMode").checked, pattern=/(?:1[3-9]\d{9})|(?:[\w.+-]+@[\w.-]+\.[A-Za-z]{2,})/; lab.classList.toggle("privacy-on",enabled); for(const block of pageRecords.flatMap(page=>page.blocks)) block.element?.classList.toggle("privacy-sensitive",enabled&&pattern.test(block.original)); for(const [index,record] of pageRecords.entries()){let mask=record.overlay.querySelector(".privacy-photo-mask");if(index===0&&!mask){mask=document.createElement("div");mask.className="privacy-photo-mask";record.overlay.append(mask);}if(mask)mask.hidden=!enabled;} }
-function printResume(){ if(!pageRecords.length)return; const oldTitle=document.title; document.title=currentFileName; lab.classList.add("printing"); setTimeout(()=>{window.print(); setTimeout(()=>{document.title=oldTitle;lab.classList.remove("printing");},300);},50); }
+function printResume(){ if(!pageRecords.length)return; document.activeElement?.blur(); const oldTitle=document.title; document.title=currentFileName; lab.classList.add("printing"); setTimeout(()=>{window.print(); setTimeout(()=>{document.title=oldTitle;lab.classList.remove("printing");},300);},50); }
 
 async function saveTemplate(){ if(!activeTemplate)return; activeTemplate.updatedAt=Date.now(); activeTemplate.edits=currentEdits(); const db=await dbPromise; await requestResult(db.transaction("templates","readwrite").objectStore("templates").put(activeTemplate)); }
 async function saveEdits(){ if(!activeTemplate)return; activeTemplate.edits=currentEdits(); await saveTemplate(); }
