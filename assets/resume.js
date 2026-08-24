@@ -121,7 +121,7 @@ function handleInlineKey(event, block, element) {
   if(event.key==="Enter"&&(event.ctrlKey||event.metaKey)){event.preventDefault();element.blur();}
   if(event.key==="Escape"){event.preventDefault();block.text=block.original;block.modified=false;element.textContent=block.original;reflowPage(pageRecords[block.pageNo-1]);element.blur();}
 }
-function paintInlineBlock(block,active=false){const el=block.element;el.style.background=block.background;el.style.boxShadow=`0 0 0 2px ${block.background}`;el.style.color=block.color;if(active)el.classList.add("inline-active");}
+function paintInlineBlock(block,active=false){const el=block.element,background=paperColor(pageRecords[block.pageNo-1],block);el.style.background=background;el.style.boxShadow=`0 0 0 2px ${background}`;el.style.color=block.color;if(active)el.classList.add("inline-active");}
 function normalizeEditedText(text){return String(text??"").replace(/\r\n?/g,"\n").replace(/\u00a0/g," ");}
 function textLines(block){return normalizeEditedText(block.text).split("\n");}
 function extraHeight(block){return Math.max(0,textLines(block).length-1)*block.lineHeight;}
@@ -135,10 +135,20 @@ function fitInlineText(block,element){
   element.classList.toggle("inline-overflow",scale<.76);
 }
 let inlineSaveTimer; function scheduleInlineSave(){clearTimeout(inlineSaveTimer);inlineSaveTimer=setTimeout(saveEdits,350);}
+function flowBreaks(record){
+  const breaks=[];
+  for(const block of record.blocks.filter(block=>extraHeight(block)>0).sort((a,b)=>a.y-b.y)){
+    let point=breaks.find(item=>Math.abs(item.sourceY-block.y)<2);
+    if(!point){point={sourceY:block.y,sourceBottom:block.y+block.height,extra:0};breaks.push(point);}
+    point.sourceBottom=Math.max(point.sourceBottom,block.y+block.height);
+    point.extra=Math.max(point.extra,Math.round(extraHeight(block)));
+  }
+  return breaks;
+}
 function reflowPage(record){
-  const sources=record.blocks.filter(block=>extraHeight(block)>0);
+  const breaks=flowBreaks(record);
   for(const block of record.blocks){
-    block.layoutY=block.y+sources.reduce((shift,source)=>shift+(source.y<block.y-1?extraHeight(source):0),0);
+    block.layoutY=block.y+breaks.reduce((shift,point)=>shift+(point.sourceY<block.y-1?point.extra:0),0);
     block.element.style.top=`${block.layoutY/record.height*100}%`;
     block.element.style.minHeight=`${(block.height+extraHeight(block))/record.height*100}%`;
   }
@@ -151,15 +161,38 @@ function renderBlock(block){
   reflowPage(record);
 }
 function redrawPage(record,activeBlock=null){
-  const ctx=record.canvas.getContext("2d");ctx.clearRect(0,0,record.canvas.width,record.canvas.height);ctx.drawImage(record.baseCanvas,0,0);
-  for(const block of record.blocks){if(block===activeBlock||block.modified||Math.abs(block.layoutY-block.y)>.5)eraseOriginal(ctx,block);}
-  for(const block of record.blocks){if(block===activeBlock)continue;if(!block.modified&&Math.abs(block.layoutY-block.y)<=.5)continue;drawBlock(ctx,block);}
+  const ctx=record.canvas.getContext("2d");
+  drawReflowedBase(ctx,record);
+  for(const block of record.blocks){if(block===activeBlock||block.modified)eraseOriginal(ctx,record,block);}
+  for(const block of record.blocks){if(block===activeBlock||!block.modified)continue;drawBlock(ctx,block);}
+}
+function drawReflowedBase(ctx,record){
+  const breaks=flowBreaks(record),width=record.canvas.width,height=record.canvas.height;
+  ctx.clearRect(0,0,width,height);ctx.fillStyle="#fff";ctx.fillRect(0,0,width,height);
+  let sourceY=0,shift=0;
+  for(const point of breaks){
+    const cut=Math.max(sourceY,Math.min(height,Math.ceil(point.sourceBottom+2))),bandHeight=cut-sourceY;
+    if(bandHeight>0)ctx.drawImage(record.baseCanvas,0,sourceY,width,bandHeight,0,sourceY+shift,width,bandHeight);
+    sourceY=cut;shift+=point.extra;
+  }
+  if(sourceY<height)ctx.drawImage(record.baseCanvas,0,sourceY,width,height-sourceY,0,sourceY+shift,width,height-sourceY);
 }
 function drawBlock(ctx,block){
   ctx.fillStyle=block.color;ctx.font=`${block.renderFontSize||block.fontSize}px "${block.fontName}","Microsoft YaHei",sans-serif`;ctx.textBaseline="top";
   textLines(block).forEach((line,index)=>ctx.fillText(line,block.x,block.layoutY+index*block.lineHeight));
 }
-function eraseOriginal(ctx,block){ctx.fillStyle=block.background;ctx.fillRect(block.x-3,block.y-2,block.width+6,Math.max(block.height,block.fontSize*1.3)+4);}
+function paperColor(record,block){
+  const ctx=record.baseCanvas.getContext("2d"),points=[];
+  for(const [x,y] of [[block.x-3,block.y-3],[block.x+block.width/2,block.y-3],[block.x+block.width+3,block.y-3],[block.x-3,block.y+block.height+3],[block.x+block.width/2,block.y+block.height+3],[block.x+block.width+3,block.y+block.height+3]]){
+    if(x<0||y<0||x>=record.width||y>=record.height)continue;
+    const data=ctx.getImageData(Math.floor(x),Math.floor(y),1,1).data,lum=.2126*data[0]+.7152*data[1]+.0722*data[2];points.push({data,lum});
+  }
+  const brightest=points.sort((a,b)=>b.lum-a.lum).slice(0,Math.min(3,points.length));
+  if(!brightest.length)return "#fff";
+  const rgb=[0,1,2].map(index=>Math.round(brightest.reduce((sum,item)=>sum+item.data[index],0)/brightest.length));
+  return `rgb(${rgb.join(",")})`;
+}
+function eraseOriginal(ctx,record,block){ctx.fillStyle=paperColor(record,block);ctx.fillRect(block.x-3,block.layoutY-2,block.width+6,Math.max(block.height,block.fontSize*1.3)+4);}
 async function resetAllEdits(){if(!pageRecords.length||!confirm("恢复原 PDF，清除全部文字修改？"))return;document.activeElement?.blur();for(const block of pageRecords.flatMap(p=>p.blocks)){block.text=block.original;block.modified=false;renderBlock(block);}selectedBlock=null;await saveEdits();setStatus("已恢复原稿");}
 function applyPrivacy(){ const enabled=$("#privacyMode").checked, pattern=/(?:1[3-9]\d{9})|(?:[\w.+-]+@[\w.-]+\.[A-Za-z]{2,})/; lab.classList.toggle("privacy-on",enabled); for(const block of pageRecords.flatMap(page=>page.blocks)) block.element?.classList.toggle("privacy-sensitive",enabled&&pattern.test(block.original)); for(const [index,record] of pageRecords.entries()){let mask=record.overlay.querySelector(".privacy-photo-mask");if(index===0&&!mask){mask=document.createElement("div");mask.className="privacy-photo-mask";record.overlay.append(mask);}if(mask)mask.hidden=!enabled;} }
 function printResume(){ if(!pageRecords.length)return; document.activeElement?.blur(); const oldTitle=document.title; document.title=currentFileName; lab.classList.add("printing"); setTimeout(()=>{window.print(); setTimeout(()=>{document.title=oldTitle;lab.classList.remove("printing");},300);},50); }
