@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="面向2027届毕业生的广东正式校招岗位雷达，每日自动核查公开招聘来源。">
   <title>睿选机会｜2027届广东校招雷达</title>
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/styles.css">
   <link rel="stylesheet" href="assets/resume.css">
   <style>.confidence{display:inline-flex!important;align-items:center;gap:4px;border-radius:99px!important;background:#e5f2eb!important;color:#246246}.confidence.lead{background:#fff0d8!important;color:#8a5a16}.view-tabs{display:flex;gap:8px;margin:0 0 18px;overflow:auto}.view-tabs button{border:1px solid #cbd4cd;background:#fff;color:#35554b;border-radius:99px;padding:10px 16px;font-weight:700;white-space:nowrap;cursor:pointer}.view-tabs button.active{background:var(--forest);border-color:var(--forest);color:#fff}.view-tabs b{display:inline-grid;place-items:center;min-width:22px;height:22px;margin-left:6px;padding:0 6px;border-radius:99px;background:#edf0ec;color:#35554b;font-size:11px}.view-tabs button.active b{background:var(--lime);color:var(--deep)}.filters{grid-template-columns:1.8fr repeat(5,1fr)}@media(max-width:950px){.filters{grid-template-columns:1fr 1fr}}@media(max-width:620px){.filters{grid-template-columns:1fr}}</style>
@@ -45,18 +46,25 @@
   </main>
   <footer><a class="brand" href="#top"><span>睿</span>睿选机会</a><p>信息来自公开招聘页面；投递前请以企业官方页面为准。</p><a href="https://github.com/2634499673lqh-gif/ruixuan-2027-job-radar" target="_blank" rel="noreferrer">GitHub</a></footer>
   <dialog id="resumeLab" class="resume-lab">
-    <form method="dialog" class="resume-lab-head"><div><span>PDF LAYOUT EDITOR · LOCAL</span><h2>简历原版式编辑</h2><p id="editorJobContext">每个人上传一次自己的 PDF，以后直接选择模板、修改并导出。</p></div><button value="cancel" aria-label="关闭">×</button></form>
-    <div class="template-bar"><div class="template-step"><b>1</b><div><span>我的简历模板</span><select id="templateSelect"><option value="">选择已保存模板</option></select></div></div><label class="file-drop">＋ 新建模板<input id="resumeFile" type="file" accept=".pdf,.docx,.txt,.md"></label><button id="resetTemplateEdits" class="ghost-button" type="button">恢复原始模板</button><button id="deleteTemplate" class="ghost-button danger" type="button">删除模板</button><label class="privacy-switch"><input id="privacyMode" type="checkbox"><span>隐私演示</span></label></div><div class="workflow-strip"><span><b>1</b> 选择模板</span><span><b>2</b> 点击文字修改</span><span><b>3</b> 导出岗位版 PDF</span><small id="fileStatus">模板仅保存在当前浏览器</small></div>
-    <div class="editor-modes" role="tablist"><button class="active" type="button" data-editor-mode="layout">原版式编辑 <b>推荐</b></button><button type="button" data-editor-mode="reflow">内容重排</button></div>
-    <div id="layoutWorkspace" class="layout-workspace">
-      <section class="pdf-layout-stage"><div class="pane-title"><b>原 PDF 页面</b><span>悬停查看文字区域，点击后修改</span></div><div id="pdfPages" class="pdf-pages"><div class="source-empty">请上传 PDF。照片、图形和页面样式会完整作为底图保留。</div></div></section>
-      <aside class="block-inspector"><div class="pane-title"><b>文字修改</b><span id="blockPosition">尚未选择</span></div><div id="blockEmpty" class="source-empty">点击 PDF 页面中的一段文字</div><div id="blockForm" hidden><label>原文字<textarea id="originalBlockText" rows="4" readonly></textarea></label><label>修改为<textarea id="editedBlockText" rows="6"></textarea></label><div class="control-row"><label>字号<input id="blockFontSize" type="number" min="6" max="48" step="0.5"></label><label>颜色<input id="blockColor" type="color" value="#172f29"></label></div><label>文本框宽度<input id="blockWidth" type="range" min="80" max="1000" step="5"></label><p id="overflowHint" class="overflow-hint"></p><div class="inspector-actions"><button id="resetBlock" class="secondary" type="button">恢复原文</button><button id="applyBlock" type="button">应用修改</button></div></div></aside>
+    <form method="dialog" class="resume-lab-head"><div><span>FAITHFUL PDF → HTML · LOCAL</span><h2>原版式简历编辑</h2><p id="editorJobContext">PDF 是唯一基准：不换模板、不改内容，只修改你选中的文字。</p></div><button value="cancel" aria-label="关闭">×</button></form>
+    <div class="template-bar">
+      <label class="file-drop">选择 PDF<input id="resumeFile" type="file" accept="application/pdf,.pdf"></label>
+      <button id="editToggle" class="primary-button" type="button" disabled>开启编辑</button>
+      <button id="resetTemplateEdits" class="ghost-button" type="button" disabled>恢复原稿</button>
+      <label class="privacy-switch"><input id="privacyMode" type="checkbox"><span>隐藏隐私</span></label>
+      <button id="exportPdf" class="primary-button" type="button" disabled>导出 PDF</button>
+      <small id="fileStatus">文件只在当前电脑浏览器中处理</small>
     </div>
-    <div id="reflowWorkspace" class="resume-workspace" hidden>
-      <section class="source-preview"><div class="pane-title"><b>原文件</b><span>只读对照</span></div><div id="sourceEmpty" class="source-empty">上传 PDF 后显示原稿；DOCX 将转换为编辑版。</div><iframe id="sourcePdf" title="原简历 PDF 预览" hidden></iframe></section>
-      <section class="editable-resume"><div class="pane-title"><b>可编辑版本</b><span id="fidelityHint">等待上传</span></div><div class="format-toolbar"><button type="button" data-command="undo">撤销</button><button type="button" data-command="redo">重做</button><button type="button" data-command="bold"><b>B</b></button><button type="button" data-command="insertUnorderedList">项目符号</button><select id="blockFormat"><option value="p">正文</option><option value="h2">一级标题</option><option value="h3">二级标题</option></select></div><div id="resumeEditor" class="resume-editor" contenteditable="true" spellcheck="false" data-placeholder="上传简历后即可直接修改……"></div></section>
+    <div class="privacy-note">网址末尾加 <code>?privacy=1</code> 会自动开启隐私模式；手机号、邮箱和头像只在预览中被遮挡。</div>
+    <div class="layout-workspace">
+      <section class="pdf-layout-stage"><div class="pane-title"><b>HTML 页面预览</b><span id="pageHint">上传后完整保留 A4、色条、照片和栏目位置</span></div><div id="pdfPages" class="pdf-pages"><div class="source-empty"><b>把 PDF 放进来即可</b><span>第一次上传后会保存在这台电脑的浏览器中，下次可直接继续。</span></div></div></section>
+      <aside class="block-inspector">
+        <div class="pane-title"><b>修改选中文字</b><span id="blockPosition">尚未选择</span></div>
+        <div id="blockEmpty" class="source-empty"><b>先开启编辑</b><span>再点击页面上的一行文字。未修改部分始终保持原 PDF 样式。</span></div>
+        <div id="blockForm" hidden><label>原文字<textarea id="originalBlockText" rows="5" readonly></textarea></label><label>替换为<textarea id="editedBlockText" rows="7"></textarea></label><p id="overflowHint" class="overflow-hint"></p><div class="inspector-actions"><button id="resetBlock" class="secondary" type="button">恢复这一行</button><button id="applyBlock" type="button">应用修改</button></div></div>
+        <div class="local-guarantee"><b>本地处理</b><p>简历、照片和修改内容不会上传服务器，也不会写入公开仓库。</p></div>
+      </aside>
     </div>
-    <div class="export-bar"><div><strong id="saveModeText">原版式模式：照片和图形不变，只覆盖修改文字</strong><p id="exportHint">导出的 PDF 会高清扁平化，避免中文乱码。</p></div><div><button id="exportMarkdown" class="secondary reflow-export" type="button">导出 Markdown</button><button id="exportWord" class="secondary reflow-export" type="button">导出 Word</button><button id="exportPdf" type="button">导出原版式 PDF</button></div></div>
   </dialog>
   <script type="module" src="assets/app.js"></script>
   <script type="module" src="assets/resume.js"></script>
