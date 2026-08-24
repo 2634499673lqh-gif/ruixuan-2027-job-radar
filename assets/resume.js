@@ -58,29 +58,36 @@ async function renderPage(page, pageNo) {
   shell.append(canvas, overlay); $("#pdfPages").append(shell);
   await page.render({ canvasContext: canvas.getContext("2d"), viewport }).promise;
   const content = await page.getTextContent();
-  const blocks = groupLines(content.items, viewport, canvas, pageNo);
+  const blocks = groupRuns(content.items, viewport, canvas, pageNo);
   const record = { pageNo, canvas, overlay, blocks, width: viewport.width, height: viewport.height };
   pageRecords.push(record);
   for (const block of blocks) {
     const hit = document.createElement("button"); hit.type = "button"; hit.className = "pdf-text-block"; hit.title = block.original;
-    Object.assign(hit.style, { left:`${block.x / viewport.width * 100}%`, top:`${block.y / viewport.height * 100}%`, width:`${block.width / viewport.width * 100}%`, minHeight:`${block.height / viewport.height * 100}%`, fontSize:`${block.fontSize / viewport.width * 100}cqw` });
+    Object.assign(hit.style, { left:`${block.x / viewport.width * 100}%`, top:`${block.y / viewport.height * 100}%`, width:`${block.width / viewport.width * 100}%`, minHeight:`${block.height / viewport.height * 100}%`, fontSize:`${block.fontSize / viewport.width * 100}cqw`, fontFamily:`"${block.fontName}"` });
     hit.addEventListener("click", () => editing && selectBlock(block, hit)); block.element = hit; overlay.append(hit);
   }
 }
 
-function groupLines(items, viewport, canvas, pageNo) {
-  const fragments = items.filter((item) => item.str?.trim()).map((item) => {
+function groupRuns(items, viewport, canvas, pageNo) {
+  const fragments = items.filter((item) => item.str?.length).map((item) => {
     const tx = pdfjs.Util.transform(viewport.transform, item.transform), fontSize = Math.max(8, Math.hypot(tx[2], tx[3]));
-    return { text:item.str, x:tx[4], y:tx[5]-fontSize, width:Math.max(item.width*viewport.scale, 5), height:fontSize*1.25, fontSize };
+    return { text:item.str, fontName:item.fontName, x:tx[4], y:tx[5]-fontSize, width:Math.max(item.width*viewport.scale, 1), height:fontSize*1.25, fontSize };
   }).sort((a,b) => a.y-b.y || a.x-b.x);
   const rows = [];
   for (const item of fragments) { let row = rows.find((entry) => Math.abs(entry.y-item.y) < Math.max(3,item.fontSize*.3)); if (!row) { row={ y:item.y, items:[] }; rows.push(row); } row.items.push(item); }
-  return rows.map((row,index) => {
-    row.items.sort((a,b)=>a.x-b.x); const x=Math.min(...row.items.map(i=>i.x)), y=Math.min(...row.items.map(i=>i.y));
-    const end=Math.max(...row.items.map(i=>i.x+i.width)), height=Math.max(...row.items.map(i=>i.height)), fontSize=Math.max(...row.items.map(i=>i.fontSize));
-    const original=row.items.map(i=>i.text).join(" ").replace(/\s+/g," ").trim();
-    return { id:`${pageNo}-${index}`, pageNo, original, text:original, x, y, width:Math.max(end-x,60), height:Math.max(height,16), fontSize, background:sampleBackground(canvas,x,y,end-x,height), color:sampleInk(canvas,x,y,end-x,height), modified:false };
+  const runs = [];
+  rows.forEach((row,rowIndex) => {
+    row.items.sort((a,b)=>a.x-b.x); let parts=[];
+    const flush = () => {
+      const visible=parts.filter(part=>part.text.trim()); if(!visible.length){parts=[];return;}
+      const x=Math.min(...visible.map(i=>i.x)), y=Math.min(...visible.map(i=>i.y)), end=Math.max(...visible.map(i=>i.x+i.width));
+      const height=Math.max(...visible.map(i=>i.height)), fontSize=Math.max(...visible.map(i=>i.fontSize)), fontName=visible[0].fontName;
+      const original=parts.map(i=>i.text).join("").replace(/\s+/g," ").trim();
+      runs.push({ id:`${pageNo}-${rowIndex}-${runs.length}`, pageNo, original, text:original, fontName, x, y, width:Math.max(end-x,24), height:Math.max(height,16), fontSize, background:sampleBackground(canvas,x,y,end-x,height), color:sampleInk(canvas,x,y,end-x,height), modified:false }); parts=[];
+    };
+    for(const item of row.items){const previous=parts.at(-1),gap=previous?item.x-(previous.x+previous.width):0;const split=previous&&(item.fontName!==previous.fontName||Math.abs(item.fontSize-previous.fontSize)>1||gap>Math.max(16,item.fontSize*1.8));if(split)flush();parts.push(item);} flush();
   });
+  return runs;
 }
 
 function sampleBackground(canvas,x,y,w,h) { const ctx=canvas.getContext("2d"), points=[[x-3,y+h/2],[x+w+3,y+h/2],[x+w/2,y-3],[x+w/2,y+h+3]]; let rgb=[0,0,0],n=0; for(const [px,py] of points){if(px<0||py<0||px>=canvas.width||py>=canvas.height)continue;const d=ctx.getImageData(Math.floor(px),Math.floor(py),1,1).data;rgb=rgb.map((v,i)=>v+d[i]);n++;} return n?`rgb(${rgb.map(v=>Math.round(v/n)).join(",")})`:"white"; }
@@ -89,7 +96,7 @@ function sampleInk(canvas,x,y,w,h) { const d=canvas.getContext("2d").getImageDat
 function toggleEditing() { editing=!editing; lab.classList.toggle("editing",editing); $("#editToggle").textContent=editing?"完成编辑":"开启编辑"; $("#pageHint").textContent=editing?"点击任意一行文字进行修改":"预览模式 · 页面不会被意外改动"; if(!editing) clearSelection(); }
 function selectBlock(block, element) { lab.querySelectorAll(".pdf-text-block.selected").forEach(el=>el.classList.remove("selected")); element.classList.add("selected"); selectedBlock=block; $("#blockEmpty").hidden=true; $("#blockForm").hidden=false; $("#blockPosition").textContent=`第 ${block.pageNo} 页`; $("#originalBlockText").value=block.original; $("#editedBlockText").value=block.text; updateOverflowHint(); $("#editedBlockText").focus(); }
 function clearSelection(){ lab.querySelectorAll(".pdf-text-block.selected").forEach(el=>el.classList.remove("selected")); selectedBlock=null; $("#blockForm").hidden=true; $("#blockEmpty").hidden=false; }
-function updateOverflowHint(){ if(!selectedBlock)return; const ctx=pageRecords[selectedBlock.pageNo-1].canvas.getContext("2d"); ctx.font=`${selectedBlock.fontSize}px Microsoft YaHei,sans-serif`; const width=ctx.measureText($("#editedBlockText").value).width, overflow=width>selectedBlock.width*1.08; $("#overflowHint").textContent=overflow?"新文字更长，可能超出原位置；建议缩短内容。":"长度适合原位置。"; $("#overflowHint").classList.toggle("warning",overflow); }
+function updateOverflowHint(){ if(!selectedBlock)return; const ctx=pageRecords[selectedBlock.pageNo-1].canvas.getContext("2d"); ctx.font=`${selectedBlock.fontSize}px "${selectedBlock.fontName}"`; const width=ctx.measureText($("#editedBlockText").value).width, overflow=width>selectedBlock.width*1.08; $("#overflowHint").textContent=overflow?"新文字更长，可能超出原位置；建议缩短内容。":"长度适合原位置。"; $("#overflowHint").classList.toggle("warning",overflow); }
 function applySelectedEdit(){ if(!selectedBlock)return; selectedBlock.text=$("#editedBlockText").value.trim(); selectedBlock.modified=selectedBlock.text!==selectedBlock.original; renderBlock(selectedBlock); saveEdits(); setStatus("修改已自动保存在这台电脑"); }
 function resetSelectedBlock(){ if(!selectedBlock)return; selectedBlock.text=selectedBlock.original; selectedBlock.modified=false; renderBlock(selectedBlock); $("#editedBlockText").value=selectedBlock.original; saveEdits(); }
 function renderBlock(block){ const el=block.element; el.classList.toggle("modified",block.modified); el.textContent=block.modified?block.text:""; el.style.background=block.modified?block.background:"transparent"; el.style.color=block.color; }
