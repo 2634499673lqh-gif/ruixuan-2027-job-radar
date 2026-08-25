@@ -22,7 +22,7 @@
     "sourceUrl": "https://app.mokahr.com/campus-recruitment/huolalahr/98660#/jobs",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T09:22:36.125Z",
-    "lastSeenAt": "2026-08-25T12:32:08.776Z",
+    "lastSeenAt": "2026-08-25T12:50:02.637Z",
     "missCount": 0,
     "locationEvidence": "具体岗位上下文包含广东地点：广东 / 深圳"
   },
@@ -49,7 +49,7 @@
     "sourceUrl": "https://app.mokahr.com/campus-recruitment/huolalahr/98660#/jobs",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T09:22:36.125Z",
-    "lastSeenAt": "2026-08-25T12:32:08.776Z",
+    "lastSeenAt": "2026-08-25T12:50:02.637Z",
     "missCount": 0,
     "locationEvidence": "具体岗位上下文包含广东地点：广东 / 深圳"
   },
@@ -76,7 +76,7 @@
     "sourceUrl": "https://app.mokahr.com/campus-recruitment/huolalahr/98660#/jobs",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T09:22:36.125Z",
-    "lastSeenAt": "2026-08-25T12:32:08.776Z",
+    "lastSeenAt": "2026-08-25T12:50:02.637Z",
     "missCount": 0,
     "locationEvidence": "具体岗位上下文包含广东地点：广东 / 深圳"
   },
@@ -103,7 +103,7 @@
     "sourceUrl": "https://app.mokahr.com/campus-recruitment/inforeenviro/182015#/jobs",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T09:22:36.125Z",
-    "lastSeenAt": "2026-08-25T12:32:08.776Z",
+    "lastSeenAt": "2026-08-25T12:50:02.637Z",
     "missCount": 0,
     "locationEvidence": "具体岗位上下文包含广东地点：广东 / 佛山"
   },
@@ -207,7 +207,7 @@
     "sourceUrl": "https://app.mokahr.com/campus-recruitment/inforeenviro/182015#/jobs",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-24T05:36:56.436Z",
-    "lastSeenAt": "2026-08-25T12:32:08.776Z",
+    "lastSeenAt": "2026-08-25T12:50:02.637Z",
     "missCount": 0,
     "locationEvidence": "具体岗位上下文包含广东地点：广东 / 佛山"
   },
@@ -387,7 +387,7 @@
     "sourceUrl": "https://app.mokahr.com/campus-recruitment/inforeenviro/182015#/jobs",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-24T06:28:18.061Z",
-    "lastSeenAt": "2026-08-25T12:32:08.776Z",
+    "lastSeenAt": "2026-08-25T12:50:02.637Z",
     "missCount": 0,
     "locationEvidence": "具体岗位上下文包含广东地点：广东 / 佛山"
   },
@@ -628,7 +628,7 @@
     "match": 84,
     "confidence": "广东地点待确认",
     "confidenceRank": 1,
-    "why": "岗位方向及2027届身份匹配，且企业招聘范围或招聘单位指向广东；为避免错过机会予以保留，投递前请确认具体工作城市。",
+    "why": "企业授权招聘系统已确认2027届和产品运营方向，招聘范围指向广东，但具体岗位城市仍需进入官网确认。",
     "skills": [
       "产品经理"
     ],
@@ -639,9 +639,9 @@
     "sourceUrl": "https://app.mokahr.com/campus-recruitment/huolalahr/98660#/jobs",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T09:22:36.125Z",
-    "lastSeenAt": "2026-08-25T03:16:43.757Z",
+    "lastSeenAt": "2026-08-25T12:50:02.637Z",
     "missCount": 0,
-    "locationEvidence": "企业招聘来源、招聘单位或既有岗位范围指向广东，但该条具体岗位城市尚待进入官网确认"
+    "locationEvidence": "企业招聘范围或来源指向广东，具体岗位城市尚待进入官网确认"
   },
   {
     "id": "48f22c0ec50b",
@@ -655,7 +655,7 @@
     "match": 84,
     "confidence": "广东地点待确认",
     "confidenceRank": 1,
-    "why": "岗位方向及2027届身份匹配，且企业招聘范围或招聘单位指向广东；为避免错过机会予以保留，投递前请确认具体工作城市。",
+    "why": "企业授权招聘系统已确认2027届和产品运营方向，招聘范围指向广东，但具体岗位城市仍需进入官网确认。",
     "skills": [
       "AI产品"
     ],
@@ -666,9 +666,9 @@
     "sourceUrl": "https://app.mokahr.com/campus-recruitment/huolalahr/98660#/jobs",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T09:22:36.125Z",
-    "lastSeenAt": "2026-08-25T03:16:43.757Z",
+    "lastSeenAt": "2026-08-25T12:50:02.637Z",
     "missCount": 0,
-    "locationEvidence": "企业招聘来源、招聘单位或既有岗位范围指向广东，但该条具体岗位城市尚待进入官网确认"
+    "locationEvidence": "企业招聘范围或来源指向广东，具体岗位城市尚待进入官网确认"
   },
   {
     "company": "比亚迪",
@@ -782,7 +782,7 @@
     "match": 69,
     "confidence": "广东地点待确认",
     "confidenceRank": 1,
-    "why": "岗位方向及2027届身份匹配，且企业招聘范围或招聘单位指向广东；为避免错过机会予以保留，投递前请确认具体工作城市。",
+    "why": "企业授权招聘系统已确认2027届和供应链方向，招聘范围指向广东，但具体岗位城市仍需进入官网确认。",
     "skills": [
       "商品运营"
     ],
@@ -793,9 +793,9 @@
     "sourceUrl": "https://app.mokahr.com/campus-recruitment/antahr/142914/#/jobs",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T08:45:44.534Z",
-    "lastSeenAt": "2026-08-25T03:16:43.757Z",
+    "lastSeenAt": "2026-08-25T12:50:02.637Z",
     "missCount": 0,
-    "locationEvidence": "企业招聘来源、招聘单位或既有岗位范围指向广东，但该条具体岗位城市尚待进入官网确认"
+    "locationEvidence": "企业招聘范围或来源指向广东，具体岗位城市尚待进入官网确认"
   },
   {
     "id": "df70d9cb921e",
@@ -809,7 +809,7 @@
     "match": 69,
     "confidence": "广东地点待确认",
     "confidenceRank": 1,
-    "why": "岗位方向及2027届身份匹配，且企业招聘范围或招聘单位指向广东；为避免错过机会予以保留，投递前请确认具体工作城市。",
+    "why": "企业授权招聘系统已确认2027届和供应链方向，招聘范围指向广东，但具体岗位城市仍需进入官网确认。",
     "skills": [
       "商品运营"
     ],
@@ -820,9 +820,9 @@
     "sourceUrl": "https://app.mokahr.com/campus-recruitment/antahr/142914/#/jobs",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T08:45:44.534Z",
-    "lastSeenAt": "2026-08-25T03:16:43.757Z",
+    "lastSeenAt": "2026-08-25T12:50:02.637Z",
     "missCount": 0,
-    "locationEvidence": "企业招聘来源、招聘单位或既有岗位范围指向广东，但该条具体岗位城市尚待进入官网确认"
+    "locationEvidence": "企业招聘范围或来源指向广东，具体岗位城市尚待进入官网确认"
   },
   {
     "id": "70857307ecf2",
@@ -836,7 +836,7 @@
     "match": 69,
     "confidence": "广东地点待确认",
     "confidenceRank": 1,
-    "why": "岗位方向及2027届身份匹配，且企业招聘范围或招聘单位指向广东；为避免错过机会予以保留，投递前请确认具体工作城市。",
+    "why": "企业授权招聘系统已确认2027届和供应链方向，招聘范围指向广东，但具体岗位城市仍需进入官网确认。",
     "skills": [
       "商品运营"
     ],
@@ -847,9 +847,9 @@
     "sourceUrl": "https://app.mokahr.com/campus-recruitment/antahr/142914/#/jobs",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T08:45:44.534Z",
-    "lastSeenAt": "2026-08-25T03:16:43.757Z",
+    "lastSeenAt": "2026-08-25T12:50:02.637Z",
     "missCount": 0,
-    "locationEvidence": "企业招聘来源、招聘单位或既有岗位范围指向广东，但该条具体岗位城市尚待进入官网确认"
+    "locationEvidence": "企业招聘范围或来源指向广东，具体岗位城市尚待进入官网确认"
   },
   {
     "id": "d11b3e7e7982",
@@ -875,7 +875,7 @@
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T08:45:44.534Z",
     "lastSeenAt": "2026-08-25T03:16:43.757Z",
-    "missCount": 0,
+    "missCount": 1,
     "locationEvidence": "企业招聘来源、招聘单位或既有岗位范围指向广东，但该条具体岗位城市尚待进入官网确认"
   },
   {
@@ -890,7 +890,7 @@
     "match": 69,
     "confidence": "广东地点待确认",
     "confidenceRank": 1,
-    "why": "岗位方向及2027届身份匹配，且企业招聘范围或招聘单位指向广东；为避免错过机会予以保留，投递前请确认具体工作城市。",
+    "why": "企业授权招聘系统已确认2027届和供应链方向，招聘范围指向广东，但具体岗位城市仍需进入官网确认。",
     "skills": [
       "供应链"
     ],
@@ -901,9 +901,9 @@
     "sourceUrl": "https://walmart.zhaopin.com/",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T08:45:44.534Z",
-    "lastSeenAt": "2026-08-25T03:16:43.757Z",
+    "lastSeenAt": "2026-08-25T12:50:02.637Z",
     "missCount": 0,
-    "locationEvidence": "企业招聘来源、招聘单位或既有岗位范围指向广东，但该条具体岗位城市尚待进入官网确认"
+    "locationEvidence": "企业招聘范围或来源指向广东，具体岗位城市尚待进入官网确认"
   },
   {
     "id": "ff362d143b6e",
@@ -917,7 +917,7 @@
     "match": 69,
     "confidence": "广东地点待确认",
     "confidenceRank": 1,
-    "why": "岗位方向及2027届身份匹配，且企业招聘范围或招聘单位指向广东；为避免错过机会予以保留，投递前请确认具体工作城市。",
+    "why": "企业授权招聘系统已确认2027届和供应链方向，招聘范围指向广东，但具体岗位城市仍需进入官网确认。",
     "skills": [
       "供应链"
     ],
@@ -928,9 +928,9 @@
     "sourceUrl": "https://walmart.zhaopin.com/",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T08:45:44.534Z",
-    "lastSeenAt": "2026-08-25T03:16:43.757Z",
+    "lastSeenAt": "2026-08-25T12:50:02.637Z",
     "missCount": 0,
-    "locationEvidence": "企业招聘来源、招聘单位或既有岗位范围指向广东，但该条具体岗位城市尚待进入官网确认"
+    "locationEvidence": "企业招聘范围或来源指向广东，具体岗位城市尚待进入官网确认"
   },
   {
     "id": "d711a3d7439d",
@@ -944,7 +944,7 @@
     "match": 69,
     "confidence": "广东地点待确认",
     "confidenceRank": 1,
-    "why": "岗位方向及2027届身份匹配，且企业招聘范围或招聘单位指向广东；为避免错过机会予以保留，投递前请确认具体工作城市。",
+    "why": "企业授权招聘系统已确认2027届和供应链方向，招聘范围指向广东，但具体岗位城市仍需进入官网确认。",
     "skills": [
       "供应链"
     ],
@@ -955,9 +955,9 @@
     "sourceUrl": "https://walmart.zhaopin.com/",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T08:45:44.534Z",
-    "lastSeenAt": "2026-08-25T03:16:43.757Z",
+    "lastSeenAt": "2026-08-25T12:50:02.637Z",
     "missCount": 0,
-    "locationEvidence": "企业招聘来源、招聘单位或既有岗位范围指向广东，但该条具体岗位城市尚待进入官网确认"
+    "locationEvidence": "企业招聘范围或来源指向广东，具体岗位城市尚待进入官网确认"
   },
   {
     "id": "3469ff612e93",
@@ -971,7 +971,7 @@
     "match": 69,
     "confidence": "广东地点待确认",
     "confidenceRank": 1,
-    "why": "岗位方向及2027届身份匹配，且企业招聘范围或招聘单位指向广东；为避免错过机会予以保留，投递前请确认具体工作城市。",
+    "why": "企业授权招聘系统已确认2027届和供应链方向，招聘范围指向广东，但具体岗位城市仍需进入官网确认。",
     "skills": [
       "供应链"
     ],
@@ -982,8 +982,8 @@
     "sourceUrl": "https://walmart.zhaopin.com/",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T08:45:44.534Z",
-    "lastSeenAt": "2026-08-25T03:16:43.757Z",
+    "lastSeenAt": "2026-08-25T12:50:02.637Z",
     "missCount": 0,
-    "locationEvidence": "企业招聘来源、招聘单位或既有岗位范围指向广东，但该条具体岗位城市尚待进入官网确认"
+    "locationEvidence": "企业招聘范围或来源指向广东，具体岗位城市尚待进入官网确认"
   }
 ]

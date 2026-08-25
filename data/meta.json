@@ -1,23 +1,13 @@
 {
-  "lastSuccessfulCheck": "2026-08-24T10:29:24.813Z",
+  "lastSuccessfulCheck": "2026-08-25T12:50:02.637Z",
   "lastRunStatus": "partial",
   "sourceCount": 62,
-  "successfulSourceCount": 58,
+  "successfulSourceCount": 60,
   "failedSources": [
     {
       "company": "中国邮政储蓄银行",
       "url": "https://psbc2026.zhaopin.com/",
       "error": "HTTP 403"
-    },
-    {
-      "company": "广发期货",
-      "url": "https://wecruit.hotjob.cn/SU6513bedd1eb8054296dc453c/pb/school.html",
-      "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://wecruit.hotjob.cn/SU6513bedd1eb8054296dc453c/pb/school.html\", waiting until \"domcontentloaded\"\n"
-    },
-    {
-      "company": "广州银行",
-      "url": "https://wecruit.hotjob.cn/SU6502ae701c240e3617e3c27d/mc/index",
-      "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://wecruit.hotjob.cn/SU6502ae701c240e3617e3c27d/mc/index\", waiting until \"domcontentloaded\"\n"
     },
     {
       "company": "广东省国资委企业",
@@ -30,9 +20,6 @@
   "activeCount": 38,
   "archivedCount": 14,
   "addedCount": 0,
-  "archivedThisRun": 1,
-  "rejectedTitleCount": 0,
-  "locationAuditAt": "2026-08-25T00:00:00+08:00",
-  "locationAuditRemovedCount": 26,
-  "locationPolicy": "two-tier"
+  "archivedThisRun": 0,
+  "rejectedTitleCount": 0
 }
