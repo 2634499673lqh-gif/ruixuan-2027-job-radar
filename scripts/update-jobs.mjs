@@ -15,6 +15,7 @@ const history = await readJson("data/history.json");
 const successfulSources = new Set();
 const discovered = [];
 const failures = [];
+const sourceStats = [];
 
 const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext({ locale: "zh-CN", userAgent: "Mozilla/5.0 (compatible; RuiXuanJobRadar/2.0; +https://github.com/2634499673lqh-gif/ruixuan-2027-job-radar)" });
@@ -25,8 +26,16 @@ async function scanSource(source) {
     const response = await page.goto(source.url, { waitUntil: "domcontentloaded", timeout: 45000 });
     if (!response || response.status() >= 400) throw new Error(`HTTP ${response?.status() || "no response"}`);
     await page.waitForTimeout(source.renderWaitMs || 4500);
-    await page.evaluate(() => window.scrollTo(0, Math.min(document.body?.scrollHeight || 0, 5000))).catch(() => {});
-    await page.waitForTimeout(800);
+    for (let step = 1; step <= 6; step += 1) {
+      await page.evaluate((ratio) => window.scrollTo(0, (document.body?.scrollHeight || 0) * ratio), step / 6).catch(() => {});
+      await page.waitForTimeout(500);
+    }
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      const more = page.getByRole("button", { name: /加载更多|查看更多|更多职位|下一页/i }).first();
+      if (!await more.isVisible().catch(() => false)) break;
+      await more.click({ timeout: 3000 }).catch(() => {});
+      await page.waitForTimeout(700);
+    }
     const snapshot = await page.evaluate(() => {
       const items = [...document.querySelectorAll("a[href]")].map((a) => {
         const titleNode = a.querySelector('h1,h2,h3,h4,[class*="job-title"],[class*="position-name"],[class*="jobName"],[class*="positionName"]');
@@ -55,8 +64,10 @@ async function scanSource(source) {
       if (job) unique.set(job.id, job);
     }
     discovered.push(...unique.values());
+    sourceStats.push({ id: source.id, company: source.company, status: "success", discovered: unique.size });
   } catch (error) {
     failures.push({ company: source.company, url: source.url, error: String(error.message || error).slice(0, 180) });
+    sourceStats.push({ id: source.id, company: source.company, status: "failed", discovered: 0 });
   } finally { await page.close(); }
 }
 
@@ -109,7 +120,8 @@ await writeJson("data/meta.json", {
   sourceCount: sources.length, successfulSourceCount: successfulSources.size, failedSources: failures,
   verifiedCount: nextJobs.filter((job) => (job.confidenceRank || 2) === 2).length,
   leadCount: nextJobs.filter((job) => job.confidenceRank === 1).length,
-  activeCount: nextJobs.length, archivedCount: history.archivedJobs.length, addedCount: added.length, archivedThisRun: archived.length, rejectedTitleCount: rejectedExisting.length
+  activeCount: nextJobs.length, archivedCount: history.archivedJobs.length, addedCount: added.length, archivedThisRun: archived.length, rejectedTitleCount: rejectedExisting.length,
+  sourceStats, zeroDiscoverySources: sourceStats.filter((source) => source.status === "success" && source.discovered === 0).map((source) => source.company)
 });
 if (failures.length === sources.length) throw new Error("所有来源均读取失败；已保留现有岗位数据，但本次运行不应部署");
 console.log(`完成：${successfulSources.size}/${sources.length}个来源，新增${added.length}，归档${archived.length}，当前${nextJobs.length}。`);
