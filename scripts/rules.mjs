@@ -46,13 +46,13 @@ export function assessCandidate(text, source = {}, pageHas2027 = false, roleText
   const explicitOutsideLocation = containsAny(normalized, nonGuangdongTerms);
   const roleHasGuangdong = containsAny(normalizedRole, guangdongTerms);
   const roleHasOutside = containsAny(normalizedRole, nonGuangdongTerms);
-  // 公司总部、来源默认城市和招聘入口所在地都不能代替具体岗位地点。
   const locationConfirmed = explicitLocation;
+  const locationLead = !locationConfirmed && source.allowLocationLead === true && containsAny(source.defaultCity || "", guangdongTerms);
   const outsideOnly = explicitOutsideLocation && !explicitLocation;
   const titleOutsideOnly = roleHasOutside && !roleHasGuangdong;
   const excluded = containsAny(normalized, internshipTerms) || containsAny(normalized, socialTerms) || (hasWrongGraduateYear(normalized) && !explicitYear) || outsideOnly || titleOutsideOnly;
-  const eligible = Boolean(track) && yearConfirmed && locationConfirmed && !excluded;
-  return { eligible, track, explicitYear, locationConfirmed, confidence: "已核验具体岗位", confidenceRank: 2 };
+  const eligible = Boolean(track) && yearConfirmed && (locationConfirmed || locationLead) && !excluded;
+  return { eligible, track, explicitYear, locationConfirmed, confidence: locationConfirmed ? "已核验具体岗位" : "广东地点待确认", confidenceRank: locationConfirmed ? 2 : 1 };
 }
 export function isEligible(text, defaultCity = "") {
   return assessCandidate(text, { locationMode: defaultCity && containsAny(defaultCity, guangdongTerms) ? "guangdongOnly" : "explicit" }, false).eligible;
@@ -76,11 +76,11 @@ export function makeJob(source, candidate, now, pageHas2027 = false) {
     role, city: inferCity(text, source.defaultCity, assessment.locationConfirmed), track: assessment.track.name, type: "2027届正式校招",
     priority: assessment.track.priority, match: Math.max(50, assessment.track.score - (assessment.confidenceRank === 1 ? 8 : 0)),
     confidence: assessment.confidence, confidenceRank: assessment.confidenceRank,
-    locationEvidence: `具体岗位上下文包含广东地点：${[...new Set(guangdongTerms.filter((term) => text.includes(term)))].join(" / ")}`,
-    why: `${trustLabel}已在具体岗位上下文中确认2027届、广东地点和${assessment.track.name}方向证据；投递前仍请核验专业与截止日期。`,
+    locationEvidence: assessment.locationConfirmed ? `具体岗位上下文包含广东地点：${[...new Set(guangdongTerms.filter((term) => text.includes(term)))].join(" / ")}` : "企业招聘范围或来源指向广东，具体岗位城市尚待进入官网确认",
+    why: assessment.locationConfirmed ? `${trustLabel}已在具体岗位上下文中确认2027届、广东地点和${assessment.track.name}方向证据；投递前仍请核验专业与截止日期。` : `${trustLabel}已确认2027届和${assessment.track.name}方向，招聘范围指向广东，但具体岗位城市仍需进入官网确认。`,
     skills: assessment.track.terms.filter((term) => text.toLowerCase().includes(term.toLowerCase())).slice(0, 3), url: candidate.url,
     directLink, source: directLink ? trustLabel : source.sourceType,
-    status: "具体岗位地点已核验为广东",
+    status: assessment.locationConfirmed ? "具体岗位地点已核验为广东" : "广东候选岗位；具体工作城市待官网确认",
     sourceUrl: source.url, trustLevel: source.trustLevel || "official", discoveredAt: now, lastSeenAt: now, missCount: 0
   };
 }

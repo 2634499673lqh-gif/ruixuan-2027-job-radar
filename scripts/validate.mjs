@@ -8,8 +8,8 @@ for (const [index, job] of jobs.entries()) {
   for (const field of ["id", "company", "role", "city", "track", "type", "priority", "match", "url"]) if (job[field] === undefined || job[field] === "") errors.push(`#${index + 1} 缺少 ${field}`);
   if (ids.has(job.id)) errors.push(`重复ID：${job.id}`); ids.add(job.id);
   if (!guangdongTerms.some((term) => job.city.includes(term))) errors.push(`${job.company} 地点非广东：${job.city}`);
-  if (job.confidenceRank !== 2) errors.push(`${job.company} 具体广东岗位地点未核验：${job.role}`);
-  if (!job.locationEvidence) errors.push(`${job.company} 缺少岗位地点核验依据：${job.role}`);
+  if (![1, 2].includes(job.confidenceRank)) errors.push(`${job.company} 地点可信度等级无效：${job.role}`);
+  if (!job.locationEvidence) errors.push(`${job.company} 缺少地点判断依据：${job.role}`);
   if (nonGuangdongTerms.some((term) => job.role.includes(term)) && !guangdongTerms.some((term) => job.role.includes(term))) errors.push(`${job.company} 岗位名称含省外地点：${job.role}`);
   if (internshipTerms.some((term) => `${job.role} ${job.type}`.toLowerCase().includes(term.toLowerCase()))) errors.push(`${job.company} 疑似实习：${job.role}`);
   if (!/^https?:\/\//.test(job.url)) errors.push(`${job.company} 链接无效：${job.url}`);

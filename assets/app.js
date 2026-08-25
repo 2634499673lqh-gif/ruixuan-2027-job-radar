@@ -5,7 +5,7 @@ const saved = JSON.parse(localStorage.getItem("ruixuan-status-v3") || "{}");
 let activeView = "pending";
 const [jobs, history, meta] = await Promise.all(["jobs.json", "history.json", "meta.json"].map((file) => fetch(`data/${file}?v=${Date.now()}`).then((response) => { if (!response.ok) throw new Error(file); return response.json(); })));
 
-const confidenceOf = (job) => job.confidence || ((job.confidenceRank || 2) === 2 ? "已核验具体岗位" : "待官网核验");
+const confidenceOf = (job) => job.confidence || ((job.confidenceRank || 2) === 2 ? "已核验具体岗位" : "广东地点待确认");
 const verifiedCount = jobs.filter((job) => (job.confidenceRank || 2) === 2).length;
 const date = new Intl.DateTimeFormat("zh-CN", { timeZone: "Asia/Shanghai", dateStyle: "medium", timeStyle: "short" }).format(new Date(meta.lastSuccessfulCheck));
 $("#updatedAt").textContent = `最近成功核查：${date}`;
@@ -37,7 +37,7 @@ function render() {
   });
   $("#visibleCount").textContent = list.length; $("#empty").hidden = list.length > 0;
   $("#jobGrid").innerHTML = list.map((job) => {
-    const confidence = confidenceOf(job), isLead = confidence === "待官网核验";
+    const confidence = confidenceOf(job), isLead = confidence === "广东地点待确认";
     return `<article class="job-card ${job.priority === "优先投递" ? "top" : ""}">
       <div class="card-head"><div class="company"><span>${escapeHtml(job.company.slice(0, 1))}</span><div><h3>${escapeHtml(job.company)}</h3><p>${escapeHtml(job.employerType || "规模企业")} · ${escapeHtml(job.city)}</p></div></div><div class="score"><strong>${job.match}</strong><small>匹配</small></div></div>
       <div class="badges"><b>${escapeHtml(job.priority)}</b><span>${escapeHtml(job.track)}</span><span>${escapeHtml(job.type)}</span><span class="confidence ${isLead ? "lead" : ""}">${isLead ? "△" : "✓"} ${escapeHtml(confidence)}</span></div>

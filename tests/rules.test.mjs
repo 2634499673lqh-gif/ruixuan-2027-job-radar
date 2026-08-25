@@ -10,9 +10,10 @@ test("只接受2027届广东正式校招", () => {
 });
 test("岗位方向分类", () => { assert.equal(classify("商务专员 销售支持").name, "国际商务"); assert.equal(classify("供应链采购").name, "供应链"); });
 test("稳定ID可复现", () => { assert.equal(stableId("A", "B", "https://x"), stableId("A", "B", "https://x")); });
-test("总部在广东不能冒充岗位地点", () => {
-  const result = assessCandidate("2027届 海外业务专员 上海", { defaultCity: "深圳", locationMode: "explicit" }, true);
-  assert.equal(result.eligible, false);
+test("广东来源但岗位地点未明时作为候选线索保留", () => {
+  const result = assessCandidate("2027届 海外业务专员", { defaultCity: "深圳", allowLocationLead: true }, true);
+  assert.equal(result.eligible, true);
+  assert.equal(result.confidenceRank, 1);
 });
 test("未在具体岗位上下文确认广东地点时不入库", () => {
   const result = assessCandidate("2027届 海外业务专员", { allowLocationLead: true }, true);
