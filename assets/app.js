@@ -22,6 +22,7 @@ function escapeHtml(value = "") { return String(value).replace(/[&<>'"]/g, (char
 function updateViewCounts() {
   const counts = statusCounts(jobs, saved);
   $("#pendingViewCount").textContent = counts.pending;
+  $("#deferredViewCount").textContent = counts.deferred;
   $("#appliedViewCount").textContent = counts.applied;
   $("#passedViewCount").textContent = counts.passed;
   $("#appliedCount").textContent = counts.applied;

@@ -14,10 +14,9 @@ test("总部在广东不能冒充岗位地点", () => {
   const result = assessCandidate("2027届 海外业务专员 上海", { defaultCity: "深圳", locationMode: "explicit" }, true);
   assert.equal(result.eligible, false);
 });
-test("可能在广东的官方入口只能作为待核验线索", () => {
+test("未在具体岗位上下文确认广东地点时不入库", () => {
   const result = assessCandidate("2027届 海外业务专员", { allowLocationLead: true }, true);
-  assert.equal(result.eligible, true);
-  assert.equal(result.confidence, "待官网核验");
+  assert.equal(result.eligible, false);
 });
 test("明确2027届广东岗位为已核验具体岗位", () => {
   const result = assessCandidate("2027届 深圳 商务专员", {}, false);
@@ -34,4 +33,8 @@ test("动态招聘卡片只保留真实岗位名称", () => {
 });
 test("明确写明省外地点的岗位不能作为广东待核验线索", () => {
   assert.equal(assessCandidate("2027届 订单管理岗 浙江衢州", { allowLocationLead: true }, true).eligible, false);
+});
+test("岗位标题省外时不能被页面其他广东岗位污染", () => {
+  const result = assessCandidate("机械工程师（绍兴） 2027届 广东佛山 采购专员", { locationMode: "guangdongOnly" }, true, "机械工程师（绍兴）");
+  assert.equal(result.eligible, false);
 });

@@ -4,7 +4,7 @@ export const guangdongTerms = ["广东", "广州", "深圳", "珠海", "东莞",
 export const internshipTerms = ["实习", "intern", "暑期实习", "日常实习", "实习生", "byteintern"];
 export const graduateTerms = ["2027届", "2027 届", "2027校园招聘", "2027 校园招聘", "2027校招", "2027 校招", "2027应届", "2027 应届", "2027 graduates"];
 export const socialTerms = ["社会招聘", "社招", "有经验人士", "experienced hire"];
-export const nonGuangdongTerms = ["北京", "上海", "天津", "重庆", "浙江", "杭州", "宁波", "江苏", "南京", "苏州", "无锡", "福建", "厦门", "福州", "山东", "青岛", "济南", "四川", "成都", "湖北", "武汉", "湖南", "长沙", "安徽", "合肥", "陕西", "西安", "河南", "郑州", "河北", "石家庄", "辽宁", "沈阳", "大连", "吉林", "黑龙江", "江西", "南昌", "广西", "海南", "云南", "贵州", "甘肃", "新疆", "内蒙古"];
+export const nonGuangdongTerms = ["北京", "上海", "天津", "重庆", "浙江", "杭州", "宁波", "绍兴", "温州", "嘉兴", "江苏", "南京", "苏州", "无锡", "常州", "福建", "厦门", "福州", "山东", "青岛", "济南", "四川", "成都", "湖北", "武汉", "湖南", "长沙", "安徽", "合肥", "陕西", "西安", "河南", "郑州", "河北", "石家庄", "辽宁", "沈阳", "大连", "吉林", "黑龙江", "江西", "南昌", "广西", "海南", "云南", "贵州", "甘肃", "新疆", "内蒙古"];
 const genericRoleTitles = /^(招聘岗位|岗位列表|职位列表|查看岗位|查看职位|热招职位|校园招聘|应届生|供应链族|职位详情|岗位详情)$/i;
 const introductionTerms = ["致力于", "企业使命", "经营理念", "战略的重要组成部分", "近年来持续", "核心职能", "大脑中枢", "旗下的", "成为顾客", "提供约", "查看详情"];
 
@@ -36,18 +36,23 @@ export function isLikelyRoleTitle(value = "") {
 export function hasWrongGraduateYear(text) {
   return [...text.matchAll(/202[0-9]\s*届/g)].some((match) => !/2027\s*届/.test(match[0]));
 }
-export function assessCandidate(text, source = {}, pageHas2027 = false) {
+export function assessCandidate(text, source = {}, pageHas2027 = false, roleText = text) {
   const normalized = normalizeText(text);
+  const normalizedRole = normalizeText(roleText);
   const track = classify(normalized);
   const explicitYear = containsAny(normalized, graduateTerms);
   const yearConfirmed = explicitYear || (source.recruitYear === "2027" && pageHas2027);
   const explicitLocation = containsAny(normalized, guangdongTerms);
   const explicitOutsideLocation = containsAny(normalized, nonGuangdongTerms);
-  const sourceLocation = source.locationMode === "guangdongOnly";
-  const locationConfirmed = explicitLocation || sourceLocation;
-  const excluded = containsAny(normalized, internshipTerms) || containsAny(normalized, socialTerms) || (hasWrongGraduateYear(normalized) && !explicitYear);
-  const eligible = Boolean(track) && yearConfirmed && !excluded && (locationConfirmed || (source.allowLocationLead === true && !explicitOutsideLocation));
-  return { eligible, track, explicitYear, locationConfirmed, confidence: yearConfirmed && locationConfirmed ? "已核验具体岗位" : "待官网核验", confidenceRank: yearConfirmed && locationConfirmed ? 2 : 1 };
+  const roleHasGuangdong = containsAny(normalizedRole, guangdongTerms);
+  const roleHasOutside = containsAny(normalizedRole, nonGuangdongTerms);
+  // 公司总部、来源默认城市和招聘入口所在地都不能代替具体岗位地点。
+  const locationConfirmed = explicitLocation;
+  const outsideOnly = explicitOutsideLocation && !explicitLocation;
+  const titleOutsideOnly = roleHasOutside && !roleHasGuangdong;
+  const excluded = containsAny(normalized, internshipTerms) || containsAny(normalized, socialTerms) || (hasWrongGraduateYear(normalized) && !explicitYear) || outsideOnly || titleOutsideOnly;
+  const eligible = Boolean(track) && yearConfirmed && locationConfirmed && !excluded;
+  return { eligible, track, explicitYear, locationConfirmed, confidence: "已核验具体岗位", confidenceRank: 2 };
 }
 export function isEligible(text, defaultCity = "") {
   return assessCandidate(text, { locationMode: defaultCity && containsAny(defaultCity, guangdongTerms) ? "guangdongOnly" : "explicit" }, false).eligible;
@@ -60,7 +65,7 @@ export function inferCity(text, fallback, locationConfirmed = true) {
 }
 export function makeJob(source, candidate, now, pageHas2027 = false) {
   const text = normalizeText(`${candidate.title} ${candidate.context}`);
-  const assessment = assessCandidate(text, source, pageHas2027);
+  const assessment = assessCandidate(text, source, pageHas2027, candidate.title);
   if (!assessment.eligible) return null;
   const role = cleanRoleTitle(candidate.title);
   if (!isLikelyRoleTitle(role)) return null;
@@ -71,10 +76,11 @@ export function makeJob(source, candidate, now, pageHas2027 = false) {
     role, city: inferCity(text, source.defaultCity, assessment.locationConfirmed), track: assessment.track.name, type: "2027届正式校招",
     priority: assessment.track.priority, match: Math.max(50, assessment.track.score - (assessment.confidenceRank === 1 ? 8 : 0)),
     confidence: assessment.confidence, confidenceRank: assessment.confidenceRank,
-    why: assessment.confidenceRank === 2 ? `${trustLabel}已同时出现2027届、广东地点和${assessment.track.name}方向证据；投递前仍请核验专业与截止日期。` : `${trustLabel}已确认2027届及${assessment.track.name}方向，但广东具体岗位地点仍需进入官网复核。`,
+    locationEvidence: `具体岗位上下文包含广东地点：${[...new Set(guangdongTerms.filter((term) => text.includes(term)))].join(" / ")}`,
+    why: `${trustLabel}已在具体岗位上下文中确认2027届、广东地点和${assessment.track.name}方向证据；投递前仍请核验专业与截止日期。`,
     skills: assessment.track.terms.filter((term) => text.toLowerCase().includes(term.toLowerCase())).slice(0, 3), url: candidate.url,
     directLink, source: directLink ? trustLabel : source.sourceType,
-    status: assessment.confidenceRank === 2 ? "官网信息已交叉校验" : "招聘线索，地点待官网核验",
+    status: "具体岗位地点已核验为广东",
     sourceUrl: source.url, trustLevel: source.trustLevel || "official", discoveredAt: now, lastSeenAt: now, missCount: 0
   };
 }
