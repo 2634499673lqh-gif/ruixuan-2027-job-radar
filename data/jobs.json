@@ -22,7 +22,7 @@
     "sourceUrl": "https://app.mokahr.com/campus-recruitment/huolalahr/98660#/jobs",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T09:22:36.125Z",
-    "lastSeenAt": "2026-08-25T14:16:38.978Z",
+    "lastSeenAt": "2026-08-25T15:46:52.464Z",
     "missCount": 0,
     "locationEvidence": "具体岗位上下文包含广东地点：广东 / 深圳"
   },
@@ -49,7 +49,7 @@
     "sourceUrl": "https://app.mokahr.com/campus-recruitment/huolalahr/98660#/jobs",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T09:22:36.125Z",
-    "lastSeenAt": "2026-08-25T14:16:38.978Z",
+    "lastSeenAt": "2026-08-25T15:46:52.464Z",
     "missCount": 0,
     "locationEvidence": "具体岗位上下文包含广东地点：广东 / 深圳"
   },
@@ -76,7 +76,7 @@
     "sourceUrl": "https://app.mokahr.com/campus-recruitment/huolalahr/98660#/jobs",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T09:22:36.125Z",
-    "lastSeenAt": "2026-08-25T14:16:38.978Z",
+    "lastSeenAt": "2026-08-25T15:46:52.464Z",
     "missCount": 0,
     "locationEvidence": "具体岗位上下文包含广东地点：广东 / 深圳"
   },
@@ -103,9 +103,63 @@
     "sourceUrl": "https://app.mokahr.com/campus-recruitment/inforeenviro/182015#/jobs",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T09:22:36.125Z",
-    "lastSeenAt": "2026-08-25T14:16:38.978Z",
+    "lastSeenAt": "2026-08-25T15:46:52.464Z",
     "missCount": 0,
     "locationEvidence": "具体岗位上下文包含广东地点：广东 / 佛山"
+  },
+  {
+    "id": "c79cb101679f",
+    "company": "DJI大疆",
+    "employerType": "大中型企业",
+    "role": "机器学习算法工程师",
+    "city": "深圳",
+    "track": "产品运营",
+    "type": "2027届正式校招",
+    "priority": "优先投递",
+    "match": 92,
+    "confidence": "已核验具体岗位",
+    "confidenceRank": 2,
+    "locationEvidence": "具体岗位上下文包含广东地点：深圳",
+    "why": "企业官方招聘已在具体岗位上下文中确认2027届、广东地点和产品运营方向证据；投递前仍请核验专业与截止日期。",
+    "skills": [
+      "产品经理"
+    ],
+    "url": "https://apply.careers.dji.com/campus-recruitment/dji/143359?locale=zh-CN#/?keyword=%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AE%97%E6%B3%95%E5%B7%A5%E7%A8%8B%E5%B8%88&page=1&anchorName=jobsList",
+    "directLink": true,
+    "source": "企业官方招聘",
+    "status": "具体岗位地点已核验为广东",
+    "sourceUrl": "https://careers.dji.com/zh-CN/campus/hot-jobs?source=campus_hotjobs",
+    "trustLevel": "official",
+    "discoveredAt": "2026-08-25T15:46:52.464Z",
+    "lastSeenAt": "2026-08-25T15:46:52.464Z",
+    "missCount": 0
+  },
+  {
+    "id": "d736f8b9b78c",
+    "company": "DJI大疆",
+    "employerType": "大中型企业",
+    "role": "空间智能应用开发工程师",
+    "city": "深圳",
+    "track": "智能汽车",
+    "type": "2027届正式校招",
+    "priority": "优先投递",
+    "match": 90,
+    "confidence": "已核验具体岗位",
+    "confidenceRank": 2,
+    "locationEvidence": "具体岗位上下文包含广东地点：深圳",
+    "why": "企业官方招聘已在具体岗位上下文中确认2027届、广东地点和智能汽车方向证据；投递前仍请核验专业与截止日期。",
+    "skills": [
+      "用户体验"
+    ],
+    "url": "https://apply.careers.dji.com/campus-recruitment/dji/143359?locale=zh-CN#/?keyword=%E7%A9%BA%E9%97%B4%E6%99%BA%E8%83%BD%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88&page=1&anchorName=jobsList",
+    "directLink": true,
+    "source": "企业官方招聘",
+    "status": "具体岗位地点已核验为广东",
+    "sourceUrl": "https://careers.dji.com/zh-CN/campus/hot-jobs?source=campus_hotjobs",
+    "trustLevel": "official",
+    "discoveredAt": "2026-08-25T15:46:52.464Z",
+    "lastSeenAt": "2026-08-25T15:46:52.464Z",
+    "missCount": 0
   },
   {
     "employerType": "规模企业",
@@ -207,7 +261,7 @@
     "sourceUrl": "https://app.mokahr.com/campus-recruitment/inforeenviro/182015#/jobs",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-24T05:36:56.436Z",
-    "lastSeenAt": "2026-08-25T14:16:38.978Z",
+    "lastSeenAt": "2026-08-25T15:46:52.464Z",
     "missCount": 0,
     "locationEvidence": "具体岗位上下文包含广东地点：广东 / 佛山"
   },
@@ -387,7 +441,7 @@
     "sourceUrl": "https://app.mokahr.com/campus-recruitment/inforeenviro/182015#/jobs",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-24T06:28:18.061Z",
-    "lastSeenAt": "2026-08-25T14:16:38.978Z",
+    "lastSeenAt": "2026-08-25T15:46:52.464Z",
     "missCount": 0,
     "locationEvidence": "具体岗位上下文包含广东地点：广东 / 佛山"
   },
@@ -639,7 +693,7 @@
     "sourceUrl": "https://app.mokahr.com/campus-recruitment/huolalahr/98660#/jobs",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T09:22:36.125Z",
-    "lastSeenAt": "2026-08-25T14:16:38.978Z",
+    "lastSeenAt": "2026-08-25T15:46:52.464Z",
     "missCount": 0,
     "locationEvidence": "企业招聘范围或来源指向广东，具体岗位城市尚待进入官网确认"
   },
@@ -666,7 +720,7 @@
     "sourceUrl": "https://app.mokahr.com/campus-recruitment/huolalahr/98660#/jobs",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T09:22:36.125Z",
-    "lastSeenAt": "2026-08-25T14:16:38.978Z",
+    "lastSeenAt": "2026-08-25T15:46:52.464Z",
     "missCount": 0,
     "locationEvidence": "企业招聘范围或来源指向广东，具体岗位城市尚待进入官网确认"
   },
@@ -793,7 +847,7 @@
     "sourceUrl": "https://app.mokahr.com/campus-recruitment/antahr/142914/#/jobs",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T08:45:44.534Z",
-    "lastSeenAt": "2026-08-25T14:16:38.978Z",
+    "lastSeenAt": "2026-08-25T15:46:52.464Z",
     "missCount": 0,
     "locationEvidence": "企业招聘范围或来源指向广东，具体岗位城市尚待进入官网确认"
   },
@@ -820,7 +874,7 @@
     "sourceUrl": "https://app.mokahr.com/campus-recruitment/antahr/142914/#/jobs",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T08:45:44.534Z",
-    "lastSeenAt": "2026-08-25T14:16:38.978Z",
+    "lastSeenAt": "2026-08-25T15:46:52.464Z",
     "missCount": 0,
     "locationEvidence": "企业招聘范围或来源指向广东，具体岗位城市尚待进入官网确认"
   },
@@ -847,36 +901,9 @@
     "sourceUrl": "https://app.mokahr.com/campus-recruitment/antahr/142914/#/jobs",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T08:45:44.534Z",
-    "lastSeenAt": "2026-08-25T14:16:38.978Z",
+    "lastSeenAt": "2026-08-25T15:46:52.464Z",
     "missCount": 0,
     "locationEvidence": "企业招聘范围或来源指向广东，具体岗位城市尚待进入官网确认"
-  },
-  {
-    "id": "d11b3e7e7982",
-    "company": "安踏集团",
-    "employerType": "上市公司",
-    "role": "迪桑特商品运营岗 - 男服（2027届）",
-    "city": "广东省（具体城市待核验）",
-    "track": "供应链",
-    "type": "2027届正式校招",
-    "priority": "相邻可投",
-    "match": 69,
-    "confidence": "广东地点待确认",
-    "confidenceRank": 1,
-    "why": "岗位方向及2027届身份匹配，且企业招聘范围或招聘单位指向广东；为避免错过机会予以保留，投递前请确认具体工作城市。",
-    "skills": [
-      "商品运营"
-    ],
-    "url": "https://app.mokahr.com/campus-recruitment/antahr/142914/#/job/539a1ad7-7bb7-4d3b-a725-336b43fdbc2e",
-    "directLink": true,
-    "source": "企业授权招聘系统",
-    "status": "广东候选岗位；具体工作城市待官网确认",
-    "sourceUrl": "https://app.mokahr.com/campus-recruitment/antahr/142914/#/jobs",
-    "trustLevel": "officialPartner",
-    "discoveredAt": "2026-08-21T08:45:44.534Z",
-    "lastSeenAt": "2026-08-25T03:16:43.757Z",
-    "missCount": 2,
-    "locationEvidence": "企业招聘来源、招聘单位或既有岗位范围指向广东，但该条具体岗位城市尚待进入官网确认"
   },
   {
     "id": "423d594cb55a",
@@ -901,7 +928,7 @@
     "sourceUrl": "https://walmart.zhaopin.com/",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T08:45:44.534Z",
-    "lastSeenAt": "2026-08-25T14:16:38.978Z",
+    "lastSeenAt": "2026-08-25T15:46:52.464Z",
     "missCount": 0,
     "locationEvidence": "企业招聘范围或来源指向广东，具体岗位城市尚待进入官网确认"
   },
@@ -928,7 +955,7 @@
     "sourceUrl": "https://walmart.zhaopin.com/",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T08:45:44.534Z",
-    "lastSeenAt": "2026-08-25T14:16:38.978Z",
+    "lastSeenAt": "2026-08-25T15:46:52.464Z",
     "missCount": 0,
     "locationEvidence": "企业招聘范围或来源指向广东，具体岗位城市尚待进入官网确认"
   },
@@ -955,7 +982,7 @@
     "sourceUrl": "https://walmart.zhaopin.com/",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T08:45:44.534Z",
-    "lastSeenAt": "2026-08-25T14:16:38.978Z",
+    "lastSeenAt": "2026-08-25T15:46:52.464Z",
     "missCount": 0,
     "locationEvidence": "企业招聘范围或来源指向广东，具体岗位城市尚待进入官网确认"
   },
@@ -982,7 +1009,7 @@
     "sourceUrl": "https://walmart.zhaopin.com/",
     "trustLevel": "officialPartner",
     "discoveredAt": "2026-08-21T08:45:44.534Z",
-    "lastSeenAt": "2026-08-25T14:16:38.978Z",
+    "lastSeenAt": "2026-08-25T15:46:52.464Z",
     "missCount": 0,
     "locationEvidence": "企业招聘范围或来源指向广东，具体岗位城市尚待进入官网确认"
   }
