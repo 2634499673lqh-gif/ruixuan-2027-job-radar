@@ -62,5 +62,10 @@
   {"id":"gzbank","company":"广州银行","employerType":"央企国企","url":"https://wecruit.hotjob.cn/SU6502ae701c240e3617e3c27d/mc/index","defaultCity":"广州 / 广东省","sourceType":"企业授权招聘系统","trustLevel":"officialPartner","locationMode":"guangdongOnly","allowLocationLead":true},
   {"id":"gd-sasac","company":"广东省国资委企业","employerType":"央企国企","url":"https://gzw.gd.gov.cn/","defaultCity":"广东省","sourceType":"政府官方公告","trustLevel":"government","locationMode":"guangdongOnly","allowLocationLead":true},
   {"id":"sz-sasac","company":"深圳市属国企","employerType":"央企国企","url":"http://gzw.sz.gov.cn/","defaultCity":"深圳","sourceType":"政府官方公告","trustLevel":"government","locationMode":"guangdongOnly","allowLocationLead":true},
-  {"id":"gz-sasac","company":"广州市属国企","employerType":"央企国企","url":"https://gzw.gz.gov.cn/","defaultCity":"广州","sourceType":"政府官方公告","trustLevel":"government","locationMode":"guangdongOnly","allowLocationLead":true}
+  {"id":"gz-sasac","company":"广州市属国企","employerType":"央企国企","url":"https://gzw.gz.gov.cn/","defaultCity":"广州","sourceType":"政府官方公告","trustLevel":"government","locationMode":"guangdongOnly","allowLocationLead":true},
+  {"id":"tcl","company":"TCL科技集团","employerType":"上市公司","url":"https://zhaopin.tcl.com/campus/recruiting.html","defaultCity":"深圳 / 惠州","sourceType":"官方校招","trustLevel":"official","locationMode":"explicit","allowLocationLead":true,"recruitYear":"2027"},
+  {"id":"honor","company":"荣耀终端","employerType":"大中型企业","url":"https://www.honor.com/cn/career/","defaultCity":"深圳","sourceType":"官方校招","trustLevel":"official","locationMode":"explicit","allowLocationLead":true,"recruitYear":"2027"},
+  {"id":"anker","company":"安克创新","employerType":"上市公司","url":"https://career.anker.com.cn/universities/recruitment/","defaultCity":"深圳","sourceType":"官方校招","trustLevel":"official","locationMode":"explicit","allowLocationLead":true,"recruitYear":"2027"},
+  {"id":"skyworth-digital","company":"创维数字","employerType":"上市公司","url":"https://www.skyworthdigital.com/job2.html","defaultCity":"深圳","sourceType":"官方校招","trustLevel":"official","locationMode":"explicit","allowLocationLead":true},
+  {"id":"gree","company":"珠海格力电器","employerType":"上市公司","url":"https://www.gree.com/","defaultCity":"珠海","sourceType":"企业官网招聘","trustLevel":"official","locationMode":"explicit","allowLocationLead":true}
 ]
