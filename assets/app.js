@@ -7,6 +7,7 @@ const [jobs, history, meta] = await Promise.all(["jobs.json", "history.json", "m
 
 const confidenceOf = (job) => job.confidence || ((job.confidenceRank || 2) === 2 ? "已核验具体岗位" : "广东地点待确认");
 const verifiedCount = jobs.filter((job) => (job.confidenceRank || 2) === 2).length;
+$("#totalJobCount").textContent = jobs.length;
 const date = new Intl.DateTimeFormat("zh-CN", { timeZone: "Asia/Shanghai", dateStyle: "medium", timeStyle: "short" }).format(new Date(meta.lastSuccessfulCheck));
 $("#updatedAt").textContent = `最近成功核查：${date}`;
 $("#activeCount").textContent = jobs.length;
