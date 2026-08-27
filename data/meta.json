@@ -25,9 +25,9 @@
       "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://career.anker.com.cn/universities/recruitment/\", waiting until \"domcontentloaded\"\n"
     }
   ],
-  "verifiedCount": 20,
-  "leadCount": 19,
-  "activeCount": 39,
+  "verifiedCount": 38,
+  "leadCount": 23,
+  "activeCount": 61,
   "archivedCount": 15,
   "addedCount": 0,
   "archivedThisRun": 0,
@@ -530,5 +530,6 @@
     "迈瑞医疗",
     "海信集团",
     "虹科电子"
-  ]
+  ],
+  "curatedCount": 22
 }

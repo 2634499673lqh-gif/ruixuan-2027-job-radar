@@ -10,6 +10,7 @@ const day = new Intl.DateTimeFormat("zh-CN", { timeZone: "Asia/Shanghai", year: 
 const genericTitles = /^(查看|了解|更多|详情|立即投递|投递|职位|岗位|校园招聘|加入我们|招聘入口|应届生)$/i;
 
 const sources = await readJson("config/sources.json");
+const curated = await readJson("config/curated-jobs.json");
 const jobs = await readJson("data/jobs.json");
 const history = await readJson("data/history.json");
 const successfulSources = new Set();
@@ -76,6 +77,21 @@ await Promise.all(Array.from({ length: Math.min(6, queue.length) }, async () => 
   while (queue.length) await scanSource(queue.shift());
 }));
 await browser.close();
+
+for (const item of curated) {
+  discovered.push({
+    ...item,
+    id: stableId(item.company, item.role, item.url),
+    type: "2027届正式校招",
+    confidence: item.confidenceRank === 2 ? "已核验具体岗位" : "广东地点待确认",
+    why: item.confidenceRank === 2
+      ? `可信公开招聘公告已明确该岗位属于2027届正式校招且包含广东工作地点；${item.locationEvidence}。`
+      : `可信公开招聘公告已确认2027届方向和广东招聘范围；${item.locationEvidence}。`,
+    skills: [], directLink: false,
+    status: item.confidenceRank === 2 ? "公开招聘公告已核验为广东正式校招" : "广东候选岗位；具体工作城市待官网确认",
+    trustLevel: item.trustLevel || "notice", discoveredAt: now, lastSeenAt: now, missCount: 0
+  });
+}
 
 const deduped = new Map();
 for (const job of discovered) deduped.set(stableId(job.company, job.role, job.url), job);

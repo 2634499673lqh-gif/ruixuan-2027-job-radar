@@ -9,6 +9,13 @@ test("只接受2027届广东正式校招", () => {
   assert.equal(isEligible("2027届校园招聘 上海 海外业务", ""), false);
 });
 test("岗位方向分类", () => { assert.equal(classify("商务专员 销售支持").name, "国际商务"); assert.equal(classify("供应链采购").name, "供应链"); });
+test("相邻岗位方向也可进入补充选择", () => {
+  assert.equal(classify("品牌营销管培生").name, "市场品牌");
+  assert.equal(classify("海外销售").name, "销售渠道");
+  assert.equal(classify("零售管理").name, "零售管理");
+  assert.equal(classify("人力资源专员").name, "人力职能");
+  assert.equal(classify("财务管理").name, "财务风控");
+});
 test("稳定ID可复现", () => { assert.equal(stableId("A", "B", "https://x"), stableId("A", "B", "https://x")); });
 test("广东来源但岗位地点未明时作为候选线索保留", () => {
   const result = assessCandidate("2027届 海外业务专员", { defaultCity: "深圳", allowLocationLead: true }, true);
