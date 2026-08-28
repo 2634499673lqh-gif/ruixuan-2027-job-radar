@@ -1,6 +1,22 @@
 {
   "archivedJobs": [
     {
+      "company": "盈峰环境",
+      "role": "财务管培生 Finance Management Trainee",
+      "city": "广东 / 佛山",
+      "archivedAt": "2026-08-28",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/inforeenviro/182015#/job/ae24a651-25a8-46c2-80df-e93fc655b7b7"
+    },
+    {
+      "company": "盈峰环境",
+      "role": "人力资源管培生 HR Management Trainee",
+      "city": "广东 / 佛山",
+      "archivedAt": "2026-08-28",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/inforeenviro/182015#/job/53a94bb8-a20d-4176-89ea-9bc2f5241cc7"
+    },
+    {
       "company": "安踏集团",
       "role": "迪桑特商品运营岗 - 男服（2027届）",
       "city": "广东省（具体城市待核验）",
@@ -122,6 +138,12 @@
     }
   ],
   "changeLog": [
+    {
+      "date": "2026-08-28 14:17",
+      "type": "归档",
+      "title": "自动核查：新增1条，归档2条，清理误识别0条",
+      "detail": "成功读取69/72个可信公开来源；失败3个。企业介绍和非岗位长文本不会作为岗位名称入库。"
+    },
     {
       "date": "2026-08-27 23:02",
       "type": "新增",
