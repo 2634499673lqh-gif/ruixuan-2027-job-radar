@@ -1,6 +1,14 @@
 {
   "archivedJobs": [
     {
+      "company": "货拉拉",
+      "role": "反欺诈情报分析师(海外)",
+      "city": "广东 / 深圳",
+      "archivedAt": "2026-09-02",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/huolalahr/98660#/job/9a5bb7bb-3704-4de9-9efb-b5c1663f63ce"
+    },
+    {
       "company": "盈峰环境",
       "role": "运营管培生（佛山） Operations Management Trainee (Foshan)",
       "city": "佛山",
@@ -146,6 +154,12 @@
     }
   ],
   "changeLog": [
+    {
+      "date": "2026-09-02 20:01",
+      "type": "归档",
+      "title": "自动核查：新增0条，归档1条，清理误识别0条",
+      "detail": "成功读取68/72个可信公开来源；失败4个。企业介绍和非岗位长文本不会作为岗位名称入库。"
+    },
     {
       "date": "2026-09-02 08:01",
       "type": "更新",
