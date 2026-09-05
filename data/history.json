@@ -1,6 +1,38 @@
 {
   "archivedJobs": [
     {
+      "company": "盈峰环境",
+      "role": "急人力资源管培生 HR Management Trainee",
+      "city": "广东 / 佛山",
+      "archivedAt": "2026-09-05",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/inforeenviro/182015#/job/53a94bb8-a20d-4176-89ea-9bc2f5241cc7"
+    },
+    {
+      "company": "安踏集团",
+      "role": "FILA商品运营岗-总部（2027届）",
+      "city": "广东省（具体城市待核验）",
+      "archivedAt": "2026-09-05",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/antahr/142914/#/job/c87f9a41-786e-4877-a5d2-23071cad7fe6"
+    },
+    {
+      "company": "安踏集团",
+      "role": "迪桑特商品运营岗 - 男服（2027届）",
+      "city": "广东省（具体城市待核验）",
+      "archivedAt": "2026-09-05",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/antahr/142914/#/job/539a1ad7-7bb7-4d3b-a725-336b43fdbc2e"
+    },
+    {
+      "company": "安踏集团",
+      "role": "FILA OUTLETS-零售管理岗（2027届）",
+      "city": "广东省（具体城市待核验）",
+      "archivedAt": "2026-09-05",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/antahr/142914/#/job/f8424dc3-7eb1-490a-a945-64f2fc24fe70"
+    },
+    {
       "company": "货拉拉",
       "role": "反欺诈情报分析师(海外)",
       "city": "广东 / 深圳",
@@ -154,6 +186,12 @@
     }
   ],
   "changeLog": [
+    {
+      "date": "2026-09-05 20:01",
+      "type": "归档",
+      "title": "自动核查：新增0条，归档4条，清理误识别0条",
+      "detail": "成功读取70/72个可信公开来源；失败2个。企业介绍和非岗位长文本不会作为岗位名称入库。"
+    },
     {
       "date": "2026-09-05 08:01",
       "type": "更新",
