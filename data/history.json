@@ -1,6 +1,14 @@
 {
   "archivedJobs": [
     {
+      "company": "货拉拉",
+      "role": "算法工程师",
+      "city": "广东 / 深圳",
+      "archivedAt": "2026-09-09",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/huolalahr/98660#/job/29255b28-2abc-4420-ac3a-80d489f23999"
+    },
+    {
       "company": "安踏集团",
       "role": "FILA OUTLETS-人力资源岗（2027届）",
       "city": "广东省（具体城市待核验）",
@@ -194,6 +202,12 @@
     }
   ],
   "changeLog": [
+    {
+      "date": "2026-09-09 20:01",
+      "type": "归档",
+      "title": "自动核查：新增1条，归档1条，清理误识别0条",
+      "detail": "成功读取70/72个可信公开来源；失败2个。企业介绍和非岗位长文本不会作为岗位名称入库。"
+    },
     {
       "date": "2026-09-09 08:01",
       "type": "更新",
