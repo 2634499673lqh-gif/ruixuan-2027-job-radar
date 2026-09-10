@@ -1,6 +1,14 @@
 {
   "archivedJobs": [
     {
+      "company": "盈峰环境",
+      "role": "急机械工程师（佛山） Mechanical Engineer",
+      "city": "广东 / 佛山",
+      "archivedAt": "2026-09-10",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/inforeenviro/182015#/job/8f32d5e5-00ec-48a4-b8e7-5956ae186900"
+    },
+    {
       "company": "货拉拉",
       "role": "算法工程师",
       "city": "广东 / 深圳",
@@ -202,6 +210,12 @@
     }
   ],
   "changeLog": [
+    {
+      "date": "2026-09-10 20:01",
+      "type": "归档",
+      "title": "自动核查：新增1条，归档1条，清理误识别0条",
+      "detail": "成功读取70/72个可信公开来源；失败2个。企业介绍和非岗位长文本不会作为岗位名称入库。"
+    },
     {
       "date": "2026-09-10 08:01",
       "type": "更新",
