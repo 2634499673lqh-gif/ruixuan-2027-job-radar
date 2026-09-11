@@ -1,8 +1,8 @@
 {
-  "lastSuccessfulCheck": "2026-09-10T12:01:57.376Z",
+  "lastSuccessfulCheck": "2026-09-11T00:01:35.897Z",
   "lastRunStatus": "partial",
   "sourceCount": 72,
-  "successfulSourceCount": 70,
+  "successfulSourceCount": 69,
   "failedSources": [
     {
       "company": "中国邮政储蓄银行",
@@ -13,19 +13,30 @@
       "company": "广东省国资委企业",
       "url": "https://gzw.gd.gov.cn/",
       "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://gzw.gd.gov.cn/\", waiting until \"domcontentloaded\"\n"
+    },
+    {
+      "company": "深圳市属国企",
+      "url": "http://gzw.sz.gov.cn/",
+      "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"http://gzw.sz.gov.cn/\", waiting until \"domcontentloaded\"\n"
     }
   ],
   "verifiedCount": 40,
   "leadCount": 32,
   "activeCount": 72,
   "archivedCount": 26,
-  "addedCount": 1,
-  "archivedThisRun": 1,
+  "addedCount": 0,
+  "archivedThisRun": 0,
   "rejectedTitleCount": 0,
   "sourceStats": [
     {
       "id": "xiaopeng",
       "company": "小鹏集团",
+      "status": "success",
+      "discovered": 0
+    },
+    {
+      "id": "shein",
+      "company": "SHEIN",
       "status": "success",
       "discovered": 0
     },
@@ -36,8 +47,8 @@
       "discovered": 0
     },
     {
-      "id": "shein",
-      "company": "SHEIN",
+      "id": "baidu",
+      "company": "百度",
       "status": "success",
       "discovered": 0
     },
@@ -54,26 +65,8 @@
       "discovered": 0
     },
     {
-      "id": "baidu",
-      "company": "百度",
-      "status": "success",
-      "discovered": 0
-    },
-    {
       "id": "wins",
       "company": "赢合科技",
-      "status": "success",
-      "discovered": 0
-    },
-    {
-      "id": "4399",
-      "company": "广州4399游戏",
-      "status": "success",
-      "discovered": 0
-    },
-    {
-      "id": "shopee",
-      "company": "Shopee",
       "status": "success",
       "discovered": 0
     },
@@ -84,8 +77,20 @@
       "discovered": 0
     },
     {
+      "id": "4399",
+      "company": "广州4399游戏",
+      "status": "success",
+      "discovered": 0
+    },
+    {
       "id": "lenovo",
       "company": "联想",
+      "status": "success",
+      "discovered": 0
+    },
+    {
+      "id": "shopee",
+      "company": "Shopee",
       "status": "success",
       "discovered": 0
     },
@@ -108,14 +113,14 @@
       "discovered": 0
     },
     {
-      "id": "dashenlin",
-      "company": "大参林医药集团",
+      "id": "bytedance",
+      "company": "字节跳动",
       "status": "success",
       "discovered": 0
     },
     {
-      "id": "bytedance",
-      "company": "字节跳动",
+      "id": "dashenlin",
+      "company": "大参林医药集团",
       "status": "success",
       "discovered": 0
     },
@@ -138,14 +143,14 @@
       "discovered": 0
     },
     {
-      "id": "hengan",
-      "company": "恒安集团",
+      "id": "cvte",
+      "company": "CVTE视源股份",
       "status": "success",
       "discovered": 0
     },
     {
-      "id": "cvte",
-      "company": "CVTE视源股份",
+      "id": "hengan",
+      "company": "恒安集团",
       "status": "success",
       "discovered": 0
     },
@@ -210,16 +215,16 @@
       "discovered": 2
     },
     {
-      "id": "norinco",
-      "company": "北方爆破科技",
-      "status": "success",
-      "discovered": 0
-    },
-    {
       "id": "walmart",
       "company": "沃尔玛中国",
       "status": "success",
       "discovered": 4
+    },
+    {
+      "id": "norinco",
+      "company": "北方爆破科技",
+      "status": "success",
+      "discovered": 0
     },
     {
       "id": "wens",
@@ -258,6 +263,12 @@
       "discovered": 1
     },
     {
+      "id": "xbrother",
+      "company": "共济科技",
+      "status": "success",
+      "discovered": 2
+    },
+    {
       "id": "bama",
       "company": "八马茶业",
       "status": "success",
@@ -268,12 +279,6 @@
       "company": "光大证券",
       "status": "success",
       "discovered": 0
-    },
-    {
-      "id": "xbrother",
-      "company": "共济科技",
-      "status": "success",
-      "discovered": 2
     },
     {
       "id": "pinganbank",
@@ -306,14 +311,14 @@
       "discovered": 0
     },
     {
-      "id": "sf",
-      "company": "顺丰集团",
+      "id": "midea",
+      "company": "美的集团",
       "status": "success",
       "discovered": 0
     },
     {
-      "id": "midea",
-      "company": "美的集团",
+      "id": "sf",
+      "company": "顺丰集团",
       "status": "success",
       "discovered": 0
     },
@@ -360,6 +365,12 @@
       "discovered": 0
     },
     {
+      "id": "icbc",
+      "company": "中国工商银行",
+      "status": "success",
+      "discovered": 0
+    },
+    {
       "id": "cmb",
       "company": "招商银行",
       "status": "success",
@@ -372,26 +383,14 @@
       "discovered": 0
     },
     {
-      "id": "icbc",
-      "company": "中国工商银行",
+      "id": "tcl",
+      "company": "TCL科技集团",
       "status": "success",
       "discovered": 0
     },
     {
       "id": "gz-sasac",
       "company": "广州市属国企",
-      "status": "success",
-      "discovered": 0
-    },
-    {
-      "id": "sz-sasac",
-      "company": "深圳市属国企",
-      "status": "success",
-      "discovered": 0
-    },
-    {
-      "id": "tcl",
-      "company": "TCL科技集团",
       "status": "success",
       "discovered": 0
     },
@@ -414,14 +413,14 @@
       "discovered": 0
     },
     {
-      "id": "insta360",
-      "company": "影石创新",
+      "id": "gree",
+      "company": "珠海格力电器",
       "status": "success",
       "discovered": 0
     },
     {
-      "id": "gree",
-      "company": "珠海格力电器",
+      "id": "insta360",
+      "company": "影石创新",
       "status": "success",
       "discovered": 0
     },
@@ -454,30 +453,36 @@
       "company": "广东省国资委企业",
       "status": "failed",
       "discovered": 0
+    },
+    {
+      "id": "sz-sasac",
+      "company": "深圳市属国企",
+      "status": "failed",
+      "discovered": 0
     }
   ],
   "zeroDiscoverySources": [
     "小鹏集团",
-    "OPPO",
     "SHEIN",
+    "OPPO",
+    "百度",
     "腾讯",
     "vivo",
-    "百度",
     "赢合科技",
-    "广州4399游戏",
-    "Shopee",
     "MOZA 固胜科技",
+    "广州4399游戏",
     "联想",
+    "Shopee",
     "比亚迪",
     "鼎阳科技",
     "拼多多",
-    "大参林医药集团",
     "字节跳动",
+    "大参林医药集团",
     "奥马冰箱",
     "数坤科技",
     "懂车帝",
-    "恒安集团",
     "CVTE视源股份",
+    "恒安集团",
     "图为电气",
     "迪桑特",
     "传音控股",
@@ -496,24 +501,23 @@
     "华为",
     "广发期货",
     "中兴通讯",
-    "顺丰集团",
     "美的集团",
+    "顺丰集团",
     "中国人保",
     "中国银行",
     "招商金科",
     "中国南方航空",
     "中国建设银行",
     "中国农业银行",
+    "中国工商银行",
     "招商银行",
     "广州银行",
-    "中国工商银行",
-    "广州市属国企",
-    "深圳市属国企",
     "TCL科技集团",
+    "广州市属国企",
     "安克创新",
     "创维集团",
-    "影石创新",
     "珠海格力电器",
+    "影石创新",
     "潮宏基",
     "迈瑞医疗",
     "海信集团"
