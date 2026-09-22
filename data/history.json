@@ -2,6 +2,30 @@
   "archivedJobs": [
     {
       "company": "安踏集团",
+      "role": "FILA OUTLETS-商品运营岗（2027届）",
+      "city": "广东省（具体城市待核验）",
+      "archivedAt": "2026-09-22",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/antahr/142914/#/job/cb7b9816-eb16-40e5-8790-a7853379f19b"
+    },
+    {
+      "company": "安踏集团",
+      "role": "FILA-商品运营岗（2027届）",
+      "city": "广东省（具体城市待核验）",
+      "archivedAt": "2026-09-22",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/antahr/142914/#/job/a4193f2d-49f1-4a12-8d0c-a51e15e61a2b"
+    },
+    {
+      "company": "安踏集团",
+      "role": "FILA商品运营岗-电商（2027届）",
+      "city": "广东省（具体城市待核验）",
+      "archivedAt": "2026-09-22",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/antahr/142914/#/job/c87f9a41-786e-4877-a5d2-23071cad7fe6"
+    },
+    {
+      "company": "安踏集团",
       "role": "FILA-零售管理岗（2027届）",
       "city": "广东省（具体城市待核验）",
       "archivedAt": "2026-09-19",
@@ -242,6 +266,12 @@
     }
   ],
   "changeLog": [
+    {
+      "date": "2026-09-22 23:48",
+      "type": "归档",
+      "title": "自动核查：新增0条，归档3条，清理误识别0条",
+      "detail": "成功读取70/72个可信公开来源；失败2个。企业介绍和非岗位长文本不会作为岗位名称入库。"
+    },
     {
       "date": "2026-09-22 10:00",
       "type": "更新",
