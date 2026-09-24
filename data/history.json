@@ -2,6 +2,22 @@
   "archivedJobs": [
     {
       "company": "安踏集团",
+      "role": "迪桑特零售管理岗（2027届）- 长春",
+      "city": "广东省（具体城市待核验）",
+      "archivedAt": "2026-09-24",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/antahr/142914/#/job/0cb367dc-b8e4-47a2-b9d6-3ec29b73192b"
+    },
+    {
+      "company": "安踏集团",
+      "role": "迪桑特零售管理岗（2027届）- 哈尔滨",
+      "city": "广东省（具体城市待核验）",
+      "archivedAt": "2026-09-24",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/antahr/142914/#/job/77ae6280-4180-429d-bdb6-a91554ae9d24"
+    },
+    {
+      "company": "安踏集团",
       "role": "FILA OUTLETS-商品运营岗（2027届）",
       "city": "广东省（具体城市待核验）",
       "archivedAt": "2026-09-22",
@@ -266,6 +282,12 @@
     }
   ],
   "changeLog": [
+    {
+      "date": "2026-09-24 23:58",
+      "type": "归档",
+      "title": "自动核查：新增1条，归档2条，清理误识别0条",
+      "detail": "成功读取71/72个可信公开来源；失败1个。企业介绍和非岗位长文本不会作为岗位名称入库。"
+    },
     {
       "date": "2026-09-24 09:46",
       "type": "更新",
