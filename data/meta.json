@@ -1,5 +1,5 @@
 {
-  "lastSuccessfulCheck": "2026-09-25T02:03:45.991Z",
+  "lastSuccessfulCheck": "2026-09-25T15:59:29.006Z",
   "lastRunStatus": "partial",
   "sourceCount": 72,
   "successfulSourceCount": 70,
@@ -16,11 +16,11 @@
     }
   ],
   "verifiedCount": 39,
-  "leadCount": 29,
-  "activeCount": 68,
-  "archivedCount": 35,
+  "leadCount": 28,
+  "activeCount": 67,
+  "archivedCount": 36,
   "addedCount": 0,
-  "archivedThisRun": 0,
+  "archivedThisRun": 1,
   "rejectedTitleCount": 0,
   "sourceStats": [
     {
@@ -36,14 +36,14 @@
       "discovered": 0
     },
     {
-      "id": "shein",
-      "company": "SHEIN",
+      "id": "tencent",
+      "company": "腾讯",
       "status": "success",
       "discovered": 0
     },
     {
-      "id": "tencent",
-      "company": "腾讯",
+      "id": "shein",
+      "company": "SHEIN",
       "status": "success",
       "discovered": 0
     },
@@ -66,12 +66,6 @@
       "discovered": 0
     },
     {
-      "id": "moza",
-      "company": "MOZA 固胜科技",
-      "status": "success",
-      "discovered": 0
-    },
-    {
       "id": "4399",
       "company": "广州4399游戏",
       "status": "success",
@@ -84,14 +78,14 @@
       "discovered": 0
     },
     {
-      "id": "lenovo",
-      "company": "联想",
+      "id": "moza",
+      "company": "MOZA 固胜科技",
       "status": "success",
       "discovered": 0
     },
     {
-      "id": "pdd",
-      "company": "拼多多",
+      "id": "lenovo",
+      "company": "联想",
       "status": "success",
       "discovered": 0
     },
@@ -104,6 +98,12 @@
     {
       "id": "byd",
       "company": "比亚迪",
+      "status": "success",
+      "discovered": 0
+    },
+    {
+      "id": "pdd",
+      "company": "拼多多",
       "status": "success",
       "discovered": 0
     },
@@ -138,14 +138,20 @@
       "discovered": 0
     },
     {
+      "id": "cvte",
+      "company": "CVTE视源股份",
+      "status": "success",
+      "discovered": 0
+    },
+    {
       "id": "hengan",
       "company": "恒安集团",
       "status": "success",
       "discovered": 0
     },
     {
-      "id": "cvte",
-      "company": "CVTE视源股份",
+      "id": "tuwei",
+      "company": "图为电气",
       "status": "success",
       "discovered": 0
     },
@@ -162,8 +168,8 @@
       "discovered": 0
     },
     {
-      "id": "tuwei",
-      "company": "图为电气",
+      "id": "transsion",
+      "company": "传音控股",
       "status": "success",
       "discovered": 0
     },
@@ -174,20 +180,8 @@
       "discovered": 0
     },
     {
-      "id": "transsion",
-      "company": "传音控股",
-      "status": "success",
-      "discovered": 0
-    },
-    {
       "id": "meituan",
       "company": "美团",
-      "status": "success",
-      "discovered": 0
-    },
-    {
-      "id": "qiyuan",
-      "company": "启源芯动力",
       "status": "success",
       "discovered": 0
     },
@@ -196,6 +190,12 @@
       "company": "货拉拉",
       "status": "success",
       "discovered": 4
+    },
+    {
+      "id": "qiyuan",
+      "company": "启源芯动力",
+      "status": "success",
+      "discovered": 0
     },
     {
       "id": "legou",
@@ -234,14 +234,14 @@
       "discovered": 4
     },
     {
-      "id": "haid",
-      "company": "海大集团",
+      "id": "wanda",
+      "company": "新达盟·珠海万达商管",
       "status": "success",
       "discovered": 0
     },
     {
-      "id": "wanda",
-      "company": "新达盟·珠海万达商管",
+      "id": "haid",
+      "company": "海大集团",
       "status": "success",
       "discovered": 0
     },
@@ -306,14 +306,14 @@
       "discovered": 0
     },
     {
-      "id": "midea",
-      "company": "美的集团",
+      "id": "sf",
+      "company": "顺丰集团",
       "status": "success",
       "discovered": 0
     },
     {
-      "id": "sf",
-      "company": "顺丰集团",
+      "id": "midea",
+      "company": "美的集团",
       "status": "success",
       "discovered": 0
     },
@@ -342,12 +342,6 @@
       "discovered": 0
     },
     {
-      "id": "icbc",
-      "company": "中国工商银行",
-      "status": "success",
-      "discovered": 0
-    },
-    {
       "id": "ccb",
       "company": "中国建设银行",
       "status": "success",
@@ -356,6 +350,12 @@
     {
       "id": "abc",
       "company": "中国农业银行",
+      "status": "success",
+      "discovered": 0
+    },
+    {
+      "id": "icbc",
+      "company": "中国工商银行",
       "status": "success",
       "discovered": 0
     },
@@ -426,14 +426,14 @@
       "discovered": 0
     },
     {
-      "id": "hisense",
-      "company": "海信集团",
+      "id": "mindray",
+      "company": "迈瑞医疗",
       "status": "success",
       "discovered": 0
     },
     {
-      "id": "mindray",
-      "company": "迈瑞医疗",
+      "id": "hisense",
+      "company": "海信集团",
       "status": "success",
       "discovered": 0
     },
@@ -459,36 +459,36 @@
   "zeroDiscoverySources": [
     "OPPO",
     "小鹏集团",
-    "SHEIN",
     "腾讯",
+    "SHEIN",
     "百度",
     "vivo",
     "赢合科技",
-    "MOZA 固胜科技",
     "广州4399游戏",
     "Shopee",
+    "MOZA 固胜科技",
     "联想",
-    "拼多多",
     "鼎阳科技",
     "比亚迪",
+    "拼多多",
     "大参林医药集团",
     "字节跳动",
     "奥马冰箱",
     "数坤科技",
     "懂车帝",
-    "恒安集团",
     "CVTE视源股份",
+    "恒安集团",
+    "图为电气",
     "迪桑特",
     "平安人寿",
-    "图为电气",
-    "平安产险",
     "传音控股",
+    "平安产险",
     "美团",
     "启源芯动力",
     "北方爆破科技",
     "温氏股份",
-    "海大集团",
     "新达盟·珠海万达商管",
+    "海大集团",
     "新大陆自动识别",
     "光大证券",
     "八马茶业",
@@ -496,15 +496,15 @@
     "广发期货",
     "华为",
     "中兴通讯",
-    "美的集团",
     "顺丰集团",
+    "美的集团",
     "中国人保",
     "招商金科",
     "中国南方航空",
     "中国银行",
-    "中国工商银行",
     "中国建设银行",
     "中国农业银行",
+    "中国工商银行",
     "招商银行",
     "中国邮政储蓄银行",
     "广州银行",
@@ -515,7 +515,7 @@
     "珠海格力电器",
     "影石创新",
     "潮宏基",
-    "海信集团",
-    "迈瑞医疗"
+    "迈瑞医疗",
+    "海信集团"
   ]
 }
