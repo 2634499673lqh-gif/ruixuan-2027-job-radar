@@ -1,6 +1,38 @@
 {
   "archivedJobs": [
     {
+      "company": "安踏集团",
+      "role": "公关岗（2027届）",
+      "city": "广东省（具体城市待核验）",
+      "archivedAt": "2026-10-01",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/antahr/142914/#/job/86fd0051-b16d-4938-860d-79ff40deed57"
+    },
+    {
+      "company": "安踏集团",
+      "role": "可隆零售管理岗（2027届）-长春",
+      "city": "广东省（具体城市待核验）",
+      "archivedAt": "2026-10-01",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/antahr/142914/#/job/ce278443-5054-4d74-bf13-22b9bf15ca9c"
+    },
+    {
+      "company": "安踏集团",
+      "role": "可隆零售管理岗（2027届）-哈尔滨",
+      "city": "广东省（具体城市待核验）",
+      "archivedAt": "2026-10-01",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/antahr/142914/#/job/19a12cbd-23ec-49ec-b6d6-efd7bac134c4"
+    },
+    {
+      "company": "货拉拉",
+      "role": "测试工程师（风控&大数据）",
+      "city": "广东省（具体城市待核验）",
+      "archivedAt": "2026-10-01",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/huolalahr/98660#/job/657142be-8c80-4931-8f60-ef4e9c322bae"
+    },
+    {
       "company": "货拉拉",
       "role": "算法工程师",
       "city": "广东省（具体城市待核验）",
@@ -290,6 +322,12 @@
     }
   ],
   "changeLog": [
+    {
+      "date": "2026-10-01 01:03",
+      "type": "归档",
+      "title": "自动核查：新增0条，归档4条，清理误识别0条",
+      "detail": "成功读取71/72个可信公开来源；失败1个。企业介绍和非岗位长文本不会作为岗位名称入库。"
+    },
     {
       "date": "2026-09-30 10:34",
       "type": "更新",
