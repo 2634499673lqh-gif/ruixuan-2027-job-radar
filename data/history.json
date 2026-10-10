@@ -2,6 +2,14 @@
   "archivedJobs": [
     {
       "company": "盈峰环境",
+      "role": "法务专员 Legal Specialist",
+      "city": "广东 / 佛山",
+      "archivedAt": "2026-10-10",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/inforeenviro/182015#/job/b962ec9f-88d8-4188-8224-a1ec653a9eeb"
+    },
+    {
+      "company": "盈峰环境",
       "role": "财务管培生 Finance Management Trainee",
       "city": "广东 / 佛山",
       "archivedAt": "2026-10-02",
@@ -330,6 +338,12 @@
     }
   ],
   "changeLog": [
+    {
+      "date": "2026-10-10 10:54",
+      "type": "归档",
+      "title": "自动核查：新增0条，归档1条，清理误识别0条",
+      "detail": "成功读取70/72个可信公开来源；失败2个。企业介绍和非岗位长文本不会作为岗位名称入库。"
+    },
     {
       "date": "2026-10-10 01:35",
       "type": "新增",
