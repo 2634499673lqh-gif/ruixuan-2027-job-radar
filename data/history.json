@@ -1,6 +1,14 @@
 {
   "archivedJobs": [
     {
+      "company": "安踏集团",
+      "role": "安踏成人-电商商品运营岗（2027届）",
+      "city": "广东省（具体城市待核验）",
+      "archivedAt": "2026-10-11",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/antahr/142914/#/job/bf829f6a-3755-44dc-b3b1-3658c2c76bff"
+    },
+    {
       "company": "盈峰环境",
       "role": "法务专员 Legal Specialist",
       "city": "广东 / 佛山",
@@ -338,6 +346,12 @@
     }
   ],
   "changeLog": [
+    {
+      "date": "2026-10-11 00:26",
+      "type": "归档",
+      "title": "自动核查：新增1条，归档1条，清理误识别0条",
+      "detail": "成功读取69/72个可信公开来源；失败3个。企业介绍和非岗位长文本不会作为岗位名称入库。"
+    },
     {
       "date": "2026-10-10 10:54",
       "type": "归档",
