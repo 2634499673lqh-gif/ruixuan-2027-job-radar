@@ -1,6 +1,22 @@
 {
   "archivedJobs": [
     {
+      "company": "货拉拉",
+      "role": "内容安全运营",
+      "city": "广东 / 深圳",
+      "archivedAt": "2026-10-13",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/huolalahr/98660#/job/771b7b5a-1fab-4ca1-af3c-b53e5b34dd7c"
+    },
+    {
+      "company": "货拉拉",
+      "role": "数据产品经理",
+      "city": "广东省（具体城市待核验）",
+      "archivedAt": "2026-10-13",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/huolalahr/98660#/job/00954e82-cab9-4568-875d-76855733aa5a"
+    },
+    {
       "company": "安踏集团",
       "role": "安踏儿童-电商商品运营分析岗（2027届）",
       "city": "广东省（具体城市待核验）",
@@ -354,6 +370,12 @@
     }
   ],
   "changeLog": [
+    {
+      "date": "2026-10-13 12:04",
+      "type": "归档",
+      "title": "自动核查：新增0条，归档2条，清理误识别0条",
+      "detail": "成功读取71/72个可信公开来源；失败1个。企业介绍和非岗位长文本不会作为岗位名称入库。"
+    },
     {
       "date": "2026-10-13 04:28",
       "type": "更新",
