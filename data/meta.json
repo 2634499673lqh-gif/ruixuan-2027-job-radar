@@ -1,8 +1,8 @@
 {
-  "lastSuccessfulCheck": "2026-10-13T18:33:46.604Z",
+  "lastSuccessfulCheck": "2026-10-14T02:18:51.255Z",
   "lastRunStatus": "partial",
   "sourceCount": 72,
-  "successfulSourceCount": 70,
+  "successfulSourceCount": 68,
   "failedSources": [
     {
       "company": "广东省国资委企业",
@@ -13,16 +13,32 @@
       "company": "深圳市属国企",
       "url": "http://gzw.sz.gov.cn/",
       "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"http://gzw.sz.gov.cn/\", waiting until \"domcontentloaded\"\n"
+    },
+    {
+      "company": "安克创新",
+      "url": "https://career.anker.com.cn/universities/recruitment/",
+      "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://career.anker.com.cn/universities/recruitment/\", waiting until \"domcontentloaded\"\n"
+    },
+    {
+      "company": "珠海格力电器",
+      "url": "https://www.gree.com/",
+      "error": "page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://www.gree.com/\", waiting until \"domcontentloaded\"\n"
     }
   ],
   "verifiedCount": 40,
   "leadCount": 28,
   "activeCount": 68,
   "archivedCount": 46,
-  "addedCount": 1,
+  "addedCount": 0,
   "archivedThisRun": 0,
   "rejectedTitleCount": 0,
   "sourceStats": [
+    {
+      "id": "oppo",
+      "company": "OPPO",
+      "status": "success",
+      "discovered": 0
+    },
     {
       "id": "shein",
       "company": "SHEIN",
@@ -36,20 +52,14 @@
       "discovered": 0
     },
     {
-      "id": "oppo",
-      "company": "OPPO",
+      "id": "baidu",
+      "company": "百度",
       "status": "success",
       "discovered": 0
     },
     {
       "id": "tencent",
       "company": "腾讯",
-      "status": "success",
-      "discovered": 0
-    },
-    {
-      "id": "baidu",
-      "company": "百度",
       "status": "success",
       "discovered": 0
     },
@@ -62,6 +72,12 @@
     {
       "id": "wins",
       "company": "赢合科技",
+      "status": "success",
+      "discovered": 0
+    },
+    {
+      "id": "shopee",
+      "company": "Shopee",
       "status": "success",
       "discovered": 0
     },
@@ -84,20 +100,14 @@
       "discovered": 0
     },
     {
-      "id": "shopee",
-      "company": "Shopee",
+      "id": "byd",
+      "company": "比亚迪",
       "status": "success",
       "discovered": 0
     },
     {
       "id": "siglent",
       "company": "鼎阳科技",
-      "status": "success",
-      "discovered": 0
-    },
-    {
-      "id": "byd",
-      "company": "比亚迪",
       "status": "success",
       "discovered": 0
     },
@@ -126,14 +136,14 @@
       "discovered": 0
     },
     {
-      "id": "dcar",
-      "company": "懂车帝",
+      "id": "shukun",
+      "company": "数坤科技",
       "status": "success",
       "discovered": 0
     },
     {
-      "id": "shukun",
-      "company": "数坤科技",
+      "id": "dcar",
+      "company": "懂车帝",
       "status": "success",
       "discovered": 0
     },
@@ -210,38 +220,20 @@
       "discovered": 3
     },
     {
-      "id": "walmart",
-      "company": "沃尔玛中国",
-      "status": "success",
-      "discovered": 4
-    },
-    {
       "id": "norinco",
       "company": "北方爆破科技",
       "status": "success",
       "discovered": 0
     },
     {
+      "id": "walmart",
+      "company": "沃尔玛中国",
+      "status": "success",
+      "discovered": 4
+    },
+    {
       "id": "wens",
       "company": "温氏股份",
-      "status": "success",
-      "discovered": 0
-    },
-    {
-      "id": "haid",
-      "company": "海大集团",
-      "status": "success",
-      "discovered": 0
-    },
-    {
-      "id": "wanda",
-      "company": "新达盟·珠海万达商管",
-      "status": "success",
-      "discovered": 0
-    },
-    {
-      "id": "nlscan",
-      "company": "新大陆自动识别",
       "status": "success",
       "discovered": 0
     },
@@ -252,16 +244,28 @@
       "discovered": 6
     },
     {
+      "id": "haid",
+      "company": "海大集团",
+      "status": "success",
+      "discovered": 0
+    },
+    {
+      "id": "nlscan",
+      "company": "新大陆自动识别",
+      "status": "success",
+      "discovered": 0
+    },
+    {
+      "id": "wanda",
+      "company": "新达盟·珠海万达商管",
+      "status": "success",
+      "discovered": 0
+    },
+    {
       "id": "geely",
       "company": "吉利控股集团",
       "status": "success",
       "discovered": 1
-    },
-    {
-      "id": "xbrother",
-      "company": "共济科技",
-      "status": "success",
-      "discovered": 2
     },
     {
       "id": "ebscn",
@@ -270,14 +274,14 @@
       "discovered": 0
     },
     {
-      "id": "bama",
-      "company": "八马茶业",
+      "id": "xbrother",
+      "company": "共济科技",
       "status": "success",
-      "discovered": 0
+      "discovered": 2
     },
     {
-      "id": "huawei",
-      "company": "华为",
+      "id": "bama",
+      "company": "八马茶业",
       "status": "success",
       "discovered": 0
     },
@@ -294,10 +298,22 @@
       "discovered": 0
     },
     {
+      "id": "huawei",
+      "company": "华为",
+      "status": "success",
+      "discovered": 0
+    },
+    {
       "id": "dji",
       "company": "DJI大疆",
       "status": "success",
       "discovered": 2
+    },
+    {
+      "id": "sf",
+      "company": "顺丰集团",
+      "status": "success",
+      "discovered": 0
     },
     {
       "id": "zte",
@@ -312,20 +328,14 @@
       "discovered": 0
     },
     {
-      "id": "sf",
-      "company": "顺丰集团",
+      "id": "cmft",
+      "company": "招商金科",
       "status": "success",
       "discovered": 0
     },
     {
       "id": "picc",
       "company": "中国人保",
-      "status": "success",
-      "discovered": 0
-    },
-    {
-      "id": "cmft",
-      "company": "招商金科",
       "status": "success",
       "discovered": 0
     },
@@ -348,8 +358,8 @@
       "discovered": 0
     },
     {
-      "id": "abc",
-      "company": "中国农业银行",
+      "id": "cmb",
+      "company": "招商银行",
       "status": "success",
       "discovered": 0
     },
@@ -366,14 +376,14 @@
       "discovered": 0
     },
     {
-      "id": "cmb",
-      "company": "招商银行",
+      "id": "gzbank",
+      "company": "广州银行",
       "status": "success",
       "discovered": 0
     },
     {
-      "id": "gzbank",
-      "company": "广州银行",
+      "id": "abc",
+      "company": "中国农业银行",
       "status": "success",
       "discovered": 0
     },
@@ -396,12 +406,6 @@
       "discovered": 1
     },
     {
-      "id": "anker",
-      "company": "安克创新",
-      "status": "success",
-      "discovered": 0
-    },
-    {
       "id": "skyworth-digital",
       "company": "创维集团",
       "status": "success",
@@ -410,12 +414,6 @@
     {
       "id": "insta360",
       "company": "影石创新",
-      "status": "success",
-      "discovered": 0
-    },
-    {
-      "id": "gree",
-      "company": "珠海格力电器",
       "status": "success",
       "discovered": 0
     },
@@ -438,12 +436,6 @@
       "discovered": 0
     },
     {
-      "id": "hongke",
-      "company": "虹科电子",
-      "status": "success",
-      "discovered": 1
-    },
-    {
       "id": "gd-sasac",
       "company": "广东省国资委企业",
       "status": "failed",
@@ -454,28 +446,46 @@
       "company": "深圳市属国企",
       "status": "failed",
       "discovered": 0
+    },
+    {
+      "id": "anker",
+      "company": "安克创新",
+      "status": "failed",
+      "discovered": 0
+    },
+    {
+      "id": "hongke",
+      "company": "虹科电子",
+      "status": "success",
+      "discovered": 0
+    },
+    {
+      "id": "gree",
+      "company": "珠海格力电器",
+      "status": "failed",
+      "discovered": 0
     }
   ],
   "zeroDiscoverySources": [
+    "OPPO",
     "SHEIN",
     "小鹏集团",
-    "OPPO",
-    "腾讯",
     "百度",
+    "腾讯",
     "vivo",
     "赢合科技",
+    "Shopee",
     "广州4399游戏",
     "MOZA 固胜科技",
     "联想",
-    "Shopee",
-    "鼎阳科技",
     "比亚迪",
+    "鼎阳科技",
     "拼多多",
     "大参林医药集团",
     "字节跳动",
     "奥马冰箱",
-    "懂车帝",
     "数坤科技",
+    "懂车帝",
     "CVTE视源股份",
     "恒安集团",
     "图为电气",
@@ -488,34 +498,33 @@
     "北方爆破科技",
     "温氏股份",
     "海大集团",
-    "新达盟·珠海万达商管",
     "新大陆自动识别",
+    "新达盟·珠海万达商管",
     "光大证券",
     "八马茶业",
-    "华为",
     "平安银行",
     "广发期货",
+    "华为",
+    "顺丰集团",
     "中兴通讯",
     "美的集团",
-    "顺丰集团",
-    "中国人保",
     "招商金科",
+    "中国人保",
     "中国银行",
     "中国南方航空",
     "中国建设银行",
-    "中国农业银行",
+    "招商银行",
     "中国工商银行",
     "中国邮政储蓄银行",
-    "招商银行",
     "广州银行",
+    "中国农业银行",
     "TCL科技集团",
     "广州市属国企",
-    "安克创新",
     "创维集团",
     "影石创新",
-    "珠海格力电器",
     "潮宏基",
     "迈瑞医疗",
-    "海信集团"
+    "海信集团",
+    "虹科电子"
   ]
 }
