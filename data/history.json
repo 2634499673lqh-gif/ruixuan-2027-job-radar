@@ -1,6 +1,38 @@
 {
   "archivedJobs": [
     {
+      "company": "虹科电子",
+      "role": "MORE>>",
+      "city": "湛江",
+      "archivedAt": "2026-10-22",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://career.hebut.edu.cn/home/reccalender/index.html"
+    },
+    {
+      "company": "盈峰环境",
+      "role": "人力资源管培生 HR Management Trainee",
+      "city": "广东 / 佛山",
+      "archivedAt": "2026-10-22",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/inforeenviro/182015#/job/53a94bb8-a20d-4176-89ea-9bc2f5241cc7"
+    },
+    {
+      "company": "安踏集团",
+      "role": "人力资源岗（2027届）",
+      "city": "广东省（具体城市待核验）",
+      "archivedAt": "2026-10-22",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/antahr/142914/#/job/e1bb3a3c-b8cc-4ef7-bbe5-a33086c46f3a"
+    },
+    {
+      "company": "安踏集团",
+      "role": "人力资源岗（2027届）",
+      "city": "广东省（具体城市待核验）",
+      "archivedAt": "2026-10-22",
+      "reason": "连续3次成功核查未再发现该独立岗位，已移入待复核归档",
+      "url": "https://app.mokahr.com/campus-recruitment/antahr/142914/#/job/ceb17c25-0d1d-4f2b-a94f-10db5c3c5299"
+    },
+    {
       "company": "货拉拉",
       "role": "后端开发工程师",
       "city": "广东 / 深圳",
@@ -386,6 +418,12 @@
     }
   ],
   "changeLog": [
+    {
+      "date": "2026-10-22 00:10",
+      "type": "归档",
+      "title": "自动核查：新增0条，归档4条，清理误识别0条",
+      "detail": "成功读取69/72个可信公开来源；失败3个。企业介绍和非岗位长文本不会作为岗位名称入库。"
+    },
     {
       "date": "2026-10-21 10:09",
       "type": "更新",
